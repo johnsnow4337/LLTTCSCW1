@@ -74,7 +74,7 @@ oldXOR= 0
 startvar2 = 0
 totalBytes = 0
 newBytes = b""
-size=0
+totalSize=0
 
 #Get the encrypted bytes and store them in newBytes
 for count2 in range(0x44):
@@ -84,9 +84,12 @@ for count2 in range(0x44):
     #Read little endian value from exebytes[0x14a78+count2*0xC]
     strvar3 = f'0x{exebytes[0x14a70+count2*0xC+11]:02x}{exebytes[0x14a70+count2*0xC+10]:02x}{exebytes[0x14a70+count2*0xC+9]:02x}{exebytes[0x14a70+count2*0xC+8]:02x}'
     var3 = int(strvar3,16)
-    currXOR = (var1 ^ var3)
-    size =  currXOR + size
-    #Read little endian value from exebytes[0x14a74+count2*0xC]
+    
+    #Compute size XOR
+    currSize = (var1 ^ var3)
+    totalSize =  currSize + totalSize
+    
+    #Read little endian address from exebytes[0x14a74+count2*0xC]
     strvar2 = f'0x{exebytes[0x14a70+count2*0xC+7]:02x}{exebytes[0x14a70+count2*0xC+6]:02x}{exebytes[0x14a70+count2*0xC+5]:02x}{exebytes[0x14a70+count2*0xC+4]:02x}'
     var2 = int(strvar2,16)
 
@@ -97,48 +100,55 @@ for count2 in range(0x44):
         print("From: "+hex(virtualToOffset(startvar2))+" To: "+hex(virtualToOffset(oldvar2+oldXOR))+" for "+hex(totalBytes)+" total bytes")
         startvar2 = var2
         totalBytes = 0
-    totalBytes = currXOR + totalBytes+1
+    totalBytes = currSize + totalBytes+1
 
-    #print("From: "+strvar2+" To: "+hex(currXOR+var2)+" for "+hex(currXOR)+" bytes")
+    #print("From: "+strvar2+" To: "+hex(currSize+var2)+" for "+hex(currSize)+" bytes")
     oldvar2 = var2
-    oldXOR = currXOR
+    oldXOR = currSize
 
     #Store the encrypted bytes in newBytes
-    newBytes+=newMemcpy(var2, currXOR)
+    newBytes+=newMemcpy(var2, currSize)
 
 print("Stored encrypted bytes into newBytes")
 newBytes = list(newBytes)
+
 #Store the array of longs from 0x04050cc in destVar
 destVar = newMemcpy(0x04050cc, 0x80)
-count=0
 
 #Decrypt the encrypted bytes
 for i in range(0x20):
     #Get the current offset from the array of longs
     currOffset = destVar[i*4]
-    #print("currOffset: "+hex(currOffset))
+    
     incOffset=currOffset
-    #print(hex(exebytes[virtualToOffset(0x405159) + (incOffset & 0x1f)]-newBytes[incOffset]))
+    while incOffset<totalSize:
+        #First value is offset value of decryption 0x1f key in 0x405159
+        currVal = exebytes[virtualToOffset(0x405159) + (incOffset & 0x1f)] 
 
+        #Second value is newBytes[incOffset]
+        newMemVal = newBytes[incOffset]
 
-    while incOffset<size:
-        currVal = exebytes[virtualToOffset(0x405159) + (incOffset & 0x1f)] #First value is exebytes[virtualToOffset(0x405159) + (incOffset & 0x1f)]
-        newMemVal = newBytes[incOffset] #Second val is newBytes[incOffset]
-        subtrVals = newMemVal - currVal #Decrypted value is newMemVal - currVal
-        newBytes[incOffset] = int(f'{(subtrVals & 0xffffffff):02x}'[-2:],16) #Make sure to only copy the last byte of the unsigned decrypted value
-        incOffset+=0x20 # increment the offset by 0x20
+        #Decrypted value is newMemVal - currVal
+        subtrVals = newMemVal - currVal 
+
+        #Make sure to only copy the last byte of the unsigned decrypted value
+        newBytes[incOffset] = int(f'{(subtrVals & 0xffffffff):02x}'[-2:],16) 
+
+        #increment the offset by 0x20
+        incOffset+=0x20 
 
 newBytes = bytes(newBytes)
 print("\nDecrypted newBytes and stored in myFile.exe")
 f = open("myFile.exe", "wb")
 f.write(newBytes)
 f.close
+
 print("Decrypted bytes from start of DOS Header offset (0x6afb) stored in myFile2.exe")
 f = open("myFile2.exe", "wb")
 f.write(newBytes[0x6afb:])
 f.close
 
-#Get decrypted file offset
+#Change to decrypted file vitrual offsets
 text = [0x400,0x1000]
 rdata = [0x1e00,0x3000]
 data = [0x2000,0x4000]
@@ -150,21 +160,31 @@ erloc = [0x99999999,0x99999999]
 rsrc = [0x99999999,0x99999999]
 
 print("\nIn Once Unpacked: ")
+#Set new virtual memory base
 vMemBase = 0x0AB0000
-count3=0
 secondPass = list(newBytes[0x940f:])
 print("first decrypted bytes from 0x940f stored in secondPass representing raw encrypted bytes")
+
 newExeBytes = list(newBytes[0x6afb:])
 print("first decrypted bytes from 0x6afb stored in newExeBytes representing program in virtual memory")
 
+count3=0
 #Decrypt the second packed binary
 while count3!=0xff:
-    incOffset = newExeBytes[virtualToOffset(0xAB4014+count3*4)] # get count3 value in long array stored in decrypted virtual memory at 0xAB4014
+    #Get the current offset from the array of longs
+    incOffset = newExeBytes[virtualToOffset(0xAB4014+count3*4)] 
+    
     while incOffset<0x3f400:
-        bl = newExeBytes[virtualToOffset(0xab3063)+(incOffset&0x1f)] # get first value from decrypted virtual memory
-        bh = secondPass[incOffset] # get second value from raw encrypted bytes
-        secondPass[incOffset] = int(f'{((bh-bl) & 0xffffffff):02x}'[-2:],16)#decrypted value is still the last unsigned byte of firstVal-secondVal
-        incOffset+=0xff #increment offset by 0xff
+        #First value is offset value of decryption 0x1f key in 0xab3063
+        bl = newExeBytes[virtualToOffset(0xab3063)+(incOffset&0x1f)] 
+        
+        # get second value from raw encrypted bytes
+        bh = secondPass[incOffset] 
+
+        #decrypted value is still the last unsigned byte of firstVal-secondVal
+        secondPass[incOffset] = int(f'{((bh-bl) & 0xffffffff):02x}'[-2:],16)
+        #increment offset by 0xff
+        incOffset+=0xff 
     count3+=1
 
 print("\nDecrypted Second packed binary is stored in myFile3.exe")
