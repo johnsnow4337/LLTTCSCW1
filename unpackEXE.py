@@ -1,5 +1,5 @@
 #Read bytes from exe
-exe = open("./ms457.exe","rb")
+exe = open("./msUpdate.exe","rb")
 global exebytes
 exebytes = exe.read()
 exe.close()
