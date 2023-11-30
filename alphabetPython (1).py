@@ -11,7 +11,7 @@ Barray64.append(ord('/'))
 Barray128 = [255 for i in range(128)]
 print("Barray64: ")
 print(Barray64)
-print()
+print("\n\n")
 for i in range(len(Barray64)):
     Barray128[Barray64[i]]=i
 print("Barray128: ")
