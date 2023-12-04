@@ -141,7 +141,7 @@
     //_IMAGE_NT_HEADERS.FileHeader.NumberOfSections
     noOfSections = [peAddr+0x6]
     currAddr = newRWMem
-
+    
     while count1<noOfSections:
 
         //Get IMAGE_SECTION_HEADER.VirtualAddress (first section is .text)
@@ -424,6 +424,8 @@
                 //Return the base address of the dll
                 dllBaseAddr = [loadOrderNextFlink+0x18]
                 return dllBaseAddr
+        else:
+            //There is more logic here but its never used in this stage
 
 //Get the address of the Process Environment Block of current process
 0x3120_getPEB:
