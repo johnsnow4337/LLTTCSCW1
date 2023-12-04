@@ -10,7 +10,7 @@
 
 //Perform some anti-reversing checks the nrun the next stage
 0x13d0_entry2:
-    //This could've been an anti-sanbox technique but is mostly just obfuscation
+    //This could've been an anti-sanbox technique but is most likely just obfuscation
     for i in 0x19600:
         if (GlobalMemoryStatus().dwTotalPhys ==0):
             return 0
@@ -35,34 +35,24 @@
     var1=0
     count1=0
     count2=0
-    //This loop only sets count1 = 0x1000ea, count2=3 and an array containing 0xA * [0x1000e9 & 0xff] see python script
+    //This loop only sets count1 = 0x1000ea, count2=3 and an array containing 0xA * [0x1000e9 & 0xff] see testStage2Loop.py
     do{
         //Copy the null values in 0x414f98 to 0x414f50 for 0x18 bytes
         0x3430_newMemcpy(0x414f50,0x414f98,0x18)
-        if (0x5a17 | 0)!=0: //Always true
-            if (count1 & 3) - 1 == 0:
-                if (0x92>0xF):  //Always true
-                    i=0
-                    if (0x8C<0x9F): //Always true
-                        _0x42FB()
-            else:
-                if (count1 & 3) - 2 == 0:
-                    count2 = (count2 | 0x2)
-                    count1+=1
-                else:
-                    count1+=1
-
+        if (count1 & 3) - 1 == 0:
+            i=0
+            for i in range (0xA):
+                count1XOR[i] = (count1 & 0xFF)
+            count2 = (count2 | 1)
+            count1+=1
+        else if (count1 & 3) - 2 == 0:
+            count2 = (count2 | 0x2)
+            count1+=1
         else:
-            _0x42FB:
-            if !(0x79E0<0x6227):    //Always true
-                for i in range (0xA):
-                    count1XOR[i] = (count1 & 0xFF)
-                count2 = (count2 | 1)
-                count1+=1
-
+            count1+=1
     }while(count1 < 0x1000ea)
 
-    if (count2 == 3): //Always true see python script
+    if (count2 == 3): //Always true see testStage2Loop.py
         count2 = 0x3960_intermediate1(count2)
     return count2
 
@@ -70,12 +60,9 @@
 0x3430_newMemcpy(dst,src,size):
     count=0
     for count in range(size):
-        if 0x2736!=0x1E5B:  ;Always true
-            dl = [src+count]
-            [dst+count] = dl
-    if !(0xe7<0x14):    //Always true
-        if (0x6b53>0x305e): //Always true
-            return
+        dl = [src+count]
+        [dst+count] = dl
+    return
 
 //Call the next stage and store the entered value
 0x3960_intermediate1(arg0):
@@ -87,58 +74,45 @@
 
     //Get the length of 0x40517A, always 3
     lenVar = 0x32C0_getLen(0x40517A)
-    if lenVar!=0: //Always true
-        if 0xCA>=0x3b:  //Always true
+    arrayOfResults = esp+0xd8
+    //Decrypt data will store its return values in arrayOfResults
+    0x1520_decryptData(arrayOfResults)
 
-            arrayOfResults = esp+0xd8
-            //Decrypt data will store its return values in arrayOfResults
-            0x1520_decryptData(arrayOfResults)
+    //Store arrayOfResults[0] and 0x3f400 on the stack
+    [esp+0x58] = arrayOfResults[0] // newRWMem+0x940f
+    [esp+0x5c] = 0x3f400 (0x6CBF+0x38741)
 
-            //Store arrayOfResults[0] and 0x3f400 on the stack
-            [esp+0x58] = arrayOfResults[0] // newRWMem+0x940f
-            [esp+0x5c] = 0x3f400 (0x6CBF+0x38741)
-            if 0xf6>=0x40:
-                //Store original register values on the stack
-                [esp+0x90] = [0x0414DA0] -> origEsi = 0x403c40 (entrypoint address)
-                [esp+0x94] = [0x0414DA4] -> origEdi = 0x403c40
-                [esp+0x98] = [0x0414DA8] -> origEbx
-                [esp+0x8c] = [0x0414DAC] -> origEbp
-                [esp+0x88] = [0x0414DAC] -> origEsp
+    //Store original register values on the stack
+    [esp+0x90] = [0x0414DA0] -> origEsi = 0x403c40 (entrypoint address)
+    [esp+0x94] = [0x0414DA4] -> origEdi = 0x403c40
+    [esp+0x98] = [0x0414DA8] -> origEbx
+    [esp+0x8c] = [0x0414DAC] -> origEbp
+    [esp+0x88] = [0x0414DAC] -> origEsp
 
-                lenVar = 0x32C0_getLen(0x40517a)
-                if lenVar!=0: //Always True
-                    //Gets the address of the original process loaded into memory (most likely 0x0400000)
-                    selfAddr = 0x28f0_callfindDll(0)
-                    //Store that address on the stack
-                    [esp+0x70] = selfAddr
-                    if 0xdf<0xf9:
-                        lenVar2 = 0x32C0_getLen(0x4032C0)
-                        if lenVar2!=0:  //Always true
-                            //Get address of orignal process' pe header
-                            peOffset = 0x27D0_getPEHeaderAddr(selfAddr)
-                            //IMAGE_NT_HEADERS.OptionalHeader.SizeOfImage
-                            selfSizeOfImage = [peOffset+0x50]
-                            //Store size of original process on the stack
-                            [esp+0x74] = selfSizeOfImage
-                            returnArr = esp+0x24
+    //Gets the address of the original process loaded into memory (most likely 0x0400000)
+    selfAddr = 0x28f0_callfindDll(0)
 
+    //Store that address on the stack
+    [esp+0x70] = selfAddr
 
-                            // 0x1d70_DecryptedToRWX will store return values
-                            // arrayOfResults[2] contains newRWMem+0x6afb as generated by 0x1520_decryptData
-                            // newRWMem+0x6afb is the DOS header of an application
+    //Get address of orignal process' pe header
+    peOffset = 0x27D0_getPEHeaderAddr(selfAddr)
+    //IMAGE_NT_HEADERS.OptionalHeader.SizeOfImage
+    selfSizeOfImage = [peOffset+0x50]
+    //Store size of original process on the stack
+    [esp+0x74] = selfSizeOfImage
 
-                            //Function returns address of decrypted entry function (at offset 0x2830) in excutable memory
-                            newXMemEntry=0x1d70_DecryptedToRWX(returnArr, arrayOfResults[2] "[esp+0xe0]")
+    returnArr = esp+0x24
+    // 0x1d70_DecryptedToRWX will store return values
+    // arrayOfResults[2] contains newRWMem+0x6afb as generated by 0x1520_decryptData
+    // newRWMem+0x6afb is the DOS header of an application
 
-                            lenVar3 = getLen(0x40517a)
-                            if lenVar3!=0:  //Always true
-                                lenVar4 = getLen(0x40517a)
-                                if 0x320c<0x94b:
-                                    if lenVar4!=0:  //Always true
+    //Function returns address of decrypted entry function (at offset 0x2830) in excutable memory
+    newXMemEntry=0x1d70_DecryptedToRWX(returnArr, arrayOfResults[2] "[esp+0xe0]")
 
-                                        //Enter the next stage of unpacking
-                                        newXMemEntry(returnArr)
-                                        return 1
+    //Enter the next stage of unpacking
+    newXMemEntry(returnArr)
+    return 1
 
 //Create a new area of memory with Read Write Execute permissions and copy the decrypted memory to that address
 0x1d70_DecryptedToRWX(returnArr, decryptedMem):
@@ -155,38 +129,47 @@
 
 
 0x1e30_copyDecrypted(newRWMem,decryptedMem):
-    if 0x55a8!=0x38f2:
-        peAddr = 0x27D0_getPEHeaderAddr(decryptedMem)
-        //_IMAGE_NT_HEADERS.FileHeader.SizeOfOptionalHeader
-        optionalSize = [peAddr+0x14]
-        //Get start of IMAGE_SECTION_HEADER by adding peaddr, size of IMAGE_NT_HEADERS and size of IMAGE_OPTIONAL_HEADER
-        currSectionHeader = peAddr+0x18+optionalSize
-        count1=0
-        //_IMAGE_NT_HEADERS.FileHeader.NumberOfSections
-        noOfSections = [peAddr+0x6]
-        currAddr = newRWMem
-        while count1<noOfSections:
-            //Get IMAGE_SECTION_HEADER.VirtualAddress (first section is .text)
-            sectionVAddr = [currSectionHeader+0xC]
-            //Get Absolute address for where section should be in newRWMem
-            sectionRAddr = currAddr+sectionVAddr
-            //Get location of section in decrypted mem by adding decryptedMem and PointerToRawData
-            //Section header offset 0x14 IMAGE_SECTION_HEADER.PointerToRawData
-            rawData = decryptedMem+[currSectionHeader+0x14]
-            //Section header offset 0x10 IMAGE_SECTION_HEADER.SizeOfRawData
-            sizeOfData = [currSectionHeader+0x10]
-            //Copy decrypted secttion to correct Virtual Offset in newRWMem
-            0x3430_newMemcpy(sectionRAddr, rawData, sizeOfData)
-            count1+=1
-            //Move section header to next section header by adding size of IMAGE_SECTION_HEADER to currSectionHeader
-            currSectionHeader = currSectionHeader+0x28
-        
-        //Get IMAGE_NT_HEADERS.OptionalHeader.SizeOfHeaders
-        sizeOfHeaders = [peAddr+0x54]
-        if 0x481<0x4424:
-            //Copy headers to new memory
-            0x3430_newMemcpy(newRWMem, decryptedMem, sizeOfHeaders)
-        return newRWMem
+    peAddr = 0x27D0_getPEHeaderAddr(decryptedMem)
+
+    //_IMAGE_NT_HEADERS.FileHeader.SizeOfOptionalHeader
+    optionalSize = [peAddr+0x14]
+
+    //Get start of IMAGE_SECTION_HEADER by adding peaddr, size of IMAGE_NT_HEADERS and size of IMAGE_OPTIONAL_HEADER
+    currSectionHeader = peAddr+0x18+optionalSize
+    count1=0
+
+    //_IMAGE_NT_HEADERS.FileHeader.NumberOfSections
+    noOfSections = [peAddr+0x6]
+    currAddr = newRWMem
+
+    while count1<noOfSections:
+
+        //Get IMAGE_SECTION_HEADER.VirtualAddress (first section is .text)
+        sectionVAddr = [currSectionHeader+0xC]
+
+        //Get Absolute address for where section should be in newRWMem
+        sectionRAddr = currAddr+sectionVAddr
+
+        //Get location of section in decrypted mem by adding decryptedMem and PointerToRawData
+        //Section header offset 0x14 IMAGE_SECTION_HEADER.PointerToRawData
+        rawData = decryptedMem+[currSectionHeader+0x14]
+
+        //Section header offset 0x10 IMAGE_SECTION_HEADER.SizeOfRawData
+        sizeOfData = [currSectionHeader+0x10]
+
+        //Copy decrypted secttion to correct Virtual Offset in newRWMem
+        0x3430_newMemcpy(sectionRAddr, rawData, sizeOfData)
+            
+        count1+=1
+        //Move section header to next section header by adding size of IMAGE_SECTION_HEADER to currSectionHeader
+        currSectionHeader = currSectionHeader+0x28
+    
+    //Get IMAGE_NT_HEADERS.OptionalHeader.SizeOfHeaders
+    sizeOfHeaders = [peAddr+0x54]
+            
+    //Copy headers to new memory
+    0x3430_newMemcpy(newRWMem, decryptedMem, sizeOfHeaders)
+    return newRWMem
 
 
 
@@ -194,27 +177,25 @@
 0x29A0_getSelfAddr:
     currAddr = 0x4029A0
     while True:
-        if 0x64f1<0x7c9c:
-            currAddrBytes = [currAddr]
-            // Get address with valid DOS header magic bytes
-            if currAddrBytes!=0x5a4d:
-                // Get value of current offset + 0x3c, the offset in DOS header for PE header 
-                // "e_lfanew"
-                currAddrOffsetVal = [currAddr+0x3C]
-                if 0x3553>=0x2001:
-                    //Get address with valid PE header magic
-                    if currAddrOffsetVal=="0x4550"
-                        return currAddr
-            else:
-                currAddr -= 0x1000
-                currAddr = currAddr & 0xfffff000
+        currAddrBytes = [currAddr]
+        // Get address with valid DOS header magic bytes
+        if currAddrBytes!=0x5a4d:
+            // Get value of current offset + 0x3c, the offset in DOS header for PE header 
+            // "e_lfanew"
+            currAddrOffsetVal = [currAddr+0x3C]
+            //Get address with valid PE header magic
+            if currAddrOffsetVal=="0x4550"
+                return currAddr
+        else:
+            //Decrement to next 0x1000 section of memory
+            currAddr -= 0x1000
+            currAddr = currAddr & 0xfffff000
 
 
 //Decrypt the packed executable and store it in a Read Write area of memory
 0x1520_decryptData(arrayOfResults):
     count1=0
     size = 0
-    edx= 0x5718
     myarr = [0x744,0]
     totalSize2 = 0
 
@@ -223,43 +204,35 @@
     while count1<0x44:
         size = ([0x0414a78 + count1 * 0xc] ^ [0x0414a70 + count1 * 0xc])
         totalSize = size + totalSize
-        dl=0x72 // edx=0x5772
-        if 0xA7>0x72:   //Always true
-            count1+=1
+        count1+=1
     // totalSize is always 0x493e0
+    
+    //Get the address of the kernel32 function VirtualAlloc
+    VirtualAlloc = 0x2050_findKernel32FuncAddr(0x40514C ->"VirtualAlloc")
 
-    if 0x497C>0x48b9:   //Always true
+    //Maps virtual memory at address found by CPU of size 0x493e0 with RW permissions
+    newRWMem = VirtualAlloc(0, totalSize "0x493e0",0x1000,4)
 
-        //Get the address of the kernel32 function VirtualAlloc
-        VirtualAlloc = 0x2050_findKernel32FuncAddr(0x40514C ->"VirtualAlloc")
+    count2=0
+    while count2<0x44:
+        size2 = ([0x0414a78 + count2 * 0xc] ^ [0x0414a70 + count2 * 0xc])
+        memAddr = ([0x414a74 + count2 * 0xc])
 
-        //Maps virtual memory at address found by CPU of size 0x493e0 with RW permissions
-        newRWMem = VirtualAlloc(0, totalSize "0x493e0",0x1000,4)
-        if !(0x7d7e<0x549f):    //Always true
-            if 0-0-((0x1590-0x744)<0):  //Always true
+        // Copies memory specified by 4 bytes at [0x414a74 + count2 * 0xc] 
+        // to next section in newRWMem for size2 bytes
+        0x3430_newMemcpy((newRWMem+totalSize),memAddr,size2)
+        totalSize2 = size2 + totalSize2
+        count2+=1
 
-                count2=0
-                while count2<0x44:
-                    size2 = ([0x0414a78 + count2 * 0xc] ^ [0x0414a70 + count2 * 0xc])
-                    memAddr = ([0x414a74 + count2 * 0xc])
+    //Decrypt the data copied to newRWMem
+    0x1990_decryptFunc(newRWMem,newRWMem, totalSize)
 
-                    // Copies memory specified by 4 bytes at [0x414a74 + count2 * 0xc] 
-                    // to next section in newRWMem for size2 bytes
-                    0x3430_newMemcpy((newRWMem+totalSize),memAddr,size2)
-                    totalSize2 = size2 + totalSize2
-                    count2+=1
-
-                if 0x3316!=0xa28:   //always true
-                    
-                    //Decrypt the data copied to newRWMem
-                    0x1990_decryptFunc(newRWMem,newRWMem, totalSize)
-
-                    arrayOfResults[0] = newRWMem+0x940f
-                    arrayOfResults[1] = 0x3f400
-                    //This is the offset to a DOS header inside the decrypted bytes
-                    arrayOfResults[2] = newRWMem+0x6afb
-                    arrayOfResults[3] = 0x2800
-                    return
+    arrayOfResults[0] = newRWMem+0x940f
+    arrayOfResults[1] = 0x3f400
+    //This is the offset to a DOS header inside the decrypted bytes
+    arrayOfResults[2] = newRWMem+0x6afb
+    arrayOfResults[3] = 0x2800
+    return
 
 //Decrypt the memory using an array of offsets in 0x4050cc and values at 0x405159
 //See python script for working implementation
@@ -276,12 +249,11 @@
             incOffset = currInt
             if incOffset<Size:
                 currVal = [0x405159 + (incOffset & 0x1F)]
-                if 0x2e4!=0x7641:
-                    newRWMemAddr = mem2+incOffset
-                    newRWMemVal = [newRWMemAddr]
-                    //get last byte of subtraction
-                    subtrVals = newRWMemVal - currVal
-                    [mem1+incOffset] = subtrVals
+                newRWMemAddr = mem2+incOffset
+                newRWMemVal = [newRWMemAddr]
+                //get last byte of subtraction
+                subtrVals = newRWMemVal - currVal
+                [mem1+incOffset] = subtrVals
                 incOffset+=0x20
             else:
                 count+=1
@@ -343,40 +315,40 @@
     count=0
     
     //Loop through NTDLL's export table to find the function with name matching input
-    do:
-        if 0x2db1<0x7cb5:   //Always true
-            NumberOfNames = [ExportTableAddr + 0x18] //IMAGE_EXPORT_DIRECTORY.NumberOfNames
-            // get the address of the [count] name in the list (addresses are 32 bit so count is *4)
-            currName = ntdllAddr + [AddressOfNames][count*4] 
-            count2=0
-            isExpected=0
-            while count2<0x20:
-                currChar = currName[count2]
-                if 0x81b!=0x6b2f: //always true
-                    expectedChar = funcName[count2]
-                    isExpected = ((currChar-expectedChar) == 0)
-                    if currChar=="\0" or expectedChar=="\0" or isExpected==0:
-                        break
+    do{
+        NumberOfNames = [ExportTableAddr + 0x18] //IMAGE_EXPORT_DIRECTORY.NumberOfNames
+        // get the address of the [count] name in the list (addresses are 32 bit so count is *4)
+        currName = ntdllAddr + [AddressOfNames][count*4] 
+        count2=0
+        isExpected=0
+        while count2<0x20:
+            currChar = currName[count2]
+            if 0x81b!=0x6b2f: //always true
+                expectedChar = funcName[count2]
+                isExpected = ((currChar-expectedChar) == 0)
+                if currChar=="\0" or expectedChar=="\0" or isExpected==0:
+                    break
 
-            if isExpected==0:
-                if (0x55 | 0) != 0: //always true
-                    //Shift two bytes to the next ordinal value
-                    currentOrdinalAddr = currentOrdinalAddr+0x2
-                    count+=1
-            else:
-                break
-    while count<NumberOfNames
-    if 0x2710<=0x50e8: //Always true
-        currentOrdinal= [currentOrdinalAddr]
-        if currentOrdinal != -0x1:
-            // Get relative address of function address table IMAGE_EXPORT_DIRECTORY.AddressOfFunctions
-            RelativeAddrOfFunctions =  ExportTableAddr + 0x1C
-            AbsoluteAddrOfFunctions = ntdllAddr + RelativeAddrOfFunctions
-            
-            //Get the relative address of the function by summing the absolute address of the function table with the current ordinal*4
-            AddrOfMyFunc = [AbsoluteAddrOfFunctions + currentOrdinal * 4]
-            AbsoluteAddrOfMyFunc = ntdllAddr + AddrOfMyFunc
-            return AbsoluteAddrOfMyFunc
+        if isExpected==0:
+            if (0x55 | 0) != 0: //always true
+                //Shift two bytes to the next ordinal value
+                currentOrdinalAddr = currentOrdinalAddr+0x2
+                count+=1
+        else:
+            break
+    }while(count<NumberOfNames)
+    
+    currentOrdinal= [currentOrdinalAddr]
+    if currentOrdinal != -0x1:
+        // Get relative address of function address table IMAGE_EXPORT_DIRECTORY.AddressOfFunctions
+        RelativeAddrOfFunctions =  ExportTableAddr + 0x1C
+        AbsoluteAddrOfFunctions = ntdllAddr + RelativeAddrOfFunctions
+        
+        //Get the relative address of the function by summing the absolute address of the function table with the current ordinal*4
+        AddrOfMyFunc = [AbsoluteAddrOfFunctions + currentOrdinal * 4]
+        AbsoluteAddrOfMyFunc = ntdllAddr + AddrOfMyFunc
+        return AbsoluteAddrOfMyFunc
+    return -1
                                     
 //return the 0x3C offset of address provided if it matches the IMAGE_NT_HEADER magic bytes (0x4550)
 0x27D0_getPEHeaderAddr(DOSHeaderAddr):
@@ -384,8 +356,7 @@
     if [peAddr] != 0x4550:
         return 0
     else:
-        if 0x5c7 != 0x5e57: //Always true
-            return peAddr
+        return peAddr
 
 //Get address of NTDLL in virtual memory
 0x28A0_findNTDLLAddr:
@@ -401,72 +372,66 @@
     if dllName==0: 
         0x29A0_getSelfAddr()
     else:
-        if (0x38C3<0x6B3D): //Always true
-            dllAddr = 0x2b20_findDll(dllName,0)
-            if (0x6643<0x65B6):
-                return dllAddr
+        dllAddr = 0x2b20_findDll(dllName,0)
+        return dllAddr
 
 
 //Find the address of a dll from the given string
 0x2b20_findDll(dllName,arg1):
-   if 0x43f7<0x475b:    //Always true
     PEBAddr = 0x3120_getPEB() // get the adress of the Process Environment Block
     //PEB.Ldr (0xc)
     PEB_LDR_DATA_Ptr = [PEBAddr+0xC]
     firstFlink = [PEB_LDR_DATA_Ptr + 0x14] //PEB_LDR_DATA_InMemoryOrderModuleList.Flink
     nextFlink = [firstFlink] //PEB_LDR_DATA_InMemoryOrderModuleList.Flink.Flink
-    while True:
-        if 0x3f51<0x5785:   //Always true
-            if firstFlink!=nextFlink: // if the end of the list isn't reached
-                loadOrderNextFlink=nextFlink-0x8 //LDR_DATA_TABLE_ENTRY start aka start of InLoadOrderLinks
-                baseDllLen = [nextFlink+0x24] //LDR_DATA_TABLE_ENTRY.BaseDllName.Length (0x2c)
-                baseDllBuffPtr = [loadOrderNextFlink+0x30] //LDR_DATA_TABLE_ENTRY.BaseDllName.Buffer (0x30)
-                dllBaseAddr = [loadOrderNextFlink+0x18] //LDR_DATA_TABLE_ENTRY.DllBase (0x18)
-                if dllBaseAddr != arg1 && arg1!=0:
-                    equalsExpected=0
-                    if 0x3d99>0x2357:   //Always true
-                        count1=0
-                    
-                    while True:
-                       if (0x1210 | 0) !=0: //Always true
-                        if count1<(baseDllLen//2): // if not reached the end of string
-                            currChar = [baseDllBuffPtr+count1*2]
-                            if currChar>=0x41 "A":
-                               if (0x53CA | 0) !=0: //Always true
-                                if currChar<=0x5A "Z":
-                                    currChar = currChar + 0x20 //upper case to lower case
-                            expectedChar = dllName[count1*2]
-                            equalsExpected = expectedChar == currChar
-                            if currChar != 0:
-                                if !equalsExpected:
-                                    badChar:
-                                        if equalsExpected==0:
-                                            if 0=0:
-                                            if 0x37<0x41:   //Always true
-                                            if !(0x719c<0x32FC):    //Always true
-                                            nextFlink = [nextFlink] // increment dll
-                                            break
-                                        else:
-                                            //Return the base address of the dll
-                                            dllBaseAddr = [loadOrderNextFlink+0x18]
-                                            if (0x67FA | 0)!=0: //Always true
-                                                return dllBaseAddr
-                                else:
-                                    count1+=1
-                            else:
-                                badChar()
+    
+    while firstFlink!=nextFlink: // if the end of the list isn't reached
+    
+        loadOrderNextFlink=nextFlink-0x8 //LDR_DATA_TABLE_ENTRY start aka start of InLoadOrderLinks
+    
+        baseDllLen = [nextFlink+0x24] //LDR_DATA_TABLE_ENTRY.BaseDllName.Length (0x2c)
+    
+        baseDllBuffPtr = [loadOrderNextFlink+0x30] //LDR_DATA_TABLE_ENTRY.BaseDllName.Buffer (0x30)
+    
+        dllBaseAddr = [loadOrderNextFlink+0x18] //LDR_DATA_TABLE_ENTRY.DllBase (0x18)
+    
+        if dllBaseAddr != arg1 && arg1!=0:
+            equalsExpected=0
+            count1=0
+            
+            while True:
+                if count1<(baseDllLen//2): // if not reached the end of string
+                    currChar = [baseDllBuffPtr+count1*2]
+                    if currChar>=0x41 "A":
+                        if currChar<=0x5A "Z":
+                            currChar = currChar + 0x20 //upper case to lower case
+    
+                    expectedChar = dllName[count1*2]
+                    equalsExpected = expectedChar == currChar
+    
+                    if currChar != 0:
+                        if !equalsExpected:
+                            break      
                         else:
-                            badChar()
+                            count1+=1 //Increment char
+                    else:
+                        break
+                else:
+                    break
 
+            if equalsExpected==0:
+                nextFlink = [nextFlink] // increment dll
+            else:
+                //Return the base address of the dll
+                dllBaseAddr = [loadOrderNextFlink+0x18]
+                return dllBaseAddr
 
 //Get the address of the Process Environment Block of current process
 0x3120_getPEB:
-    if 0x4e67!=0x5215:  //Always true
-        TIBAddr = 0x3200_getTIBAddr()
-        TIB_PEB_Ptr_Ptr = TIBAddr+0x30
-        //TEB.ProcessEnvironmentBlock
-        TIB_PEB_Ptr = [TIBAddr+0x30]
-        return [TIB_PEB_Ptr]
+    TIBAddr = 0x3200_getTIBAddr()
+    TIB_PEB_Ptr_Ptr = TIBAddr+0x30
+    //TEB.ProcessEnvironmentBlock
+    TIB_PEB_Ptr = [TIBAddr+0x30]
+    return [TIB_PEB_Ptr]
 
 //Get address of TIB by looking up fs[0x18]
 0x3200_getTIBAddr:
@@ -480,12 +445,8 @@
 0x32C0_getLen(arg0):
     count=0
     for i in range(len(arg0)):
-        if (0x41a6 | 0) != 0:   //Always true
-            if (0x233D<0x4c35): //Always true
-                if arg0[i]!="\0":
-                    if (0x1C64<0x5D8C):
-                        count+=1
-                else:
-                    if (0x1ae1 | 0 ) != 0:  //Always true
-                        return count
+        if arg0[i]!="\0":
+            count+=1
+        else:
+            return count
     return count
