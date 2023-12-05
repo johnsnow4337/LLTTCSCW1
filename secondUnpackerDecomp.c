@@ -73,64 +73,78 @@ setupAndRunUnpacked(*returnArr):
     //set first 0x400 bytes to read only permissions
     VirtualProtect(selfAddr,0x400,0x2,retAddr)
     peHeader = getPEHeader_d(selfAddr)
-    if _0x4!=0:
-        //IMAGE_OPTIONAL_HEADER start = IMAGE_NT_HEADERS addr + size of Signature (0x4) and size of IMAGE_FILE_HEADER (0x14)
-        optionalStart = peHeader+0x18
-        //IMAGE_NT_HEADERS.FileHeader.SizeOfOptionalHeader offset = 0x14
-        sizeOfOptional = [peHeader+0x14]
-        //IMAGE_SECTION_HEADER start = IMAGE_OPTIONAL_HEADER start + IMAGE_FILE_HEADER.SizeOfOptionalHeader
-        currSection = optionalStart+sizeOfOptional
-        protArr = esp+0x98
-        protArrAdd0x14 = protArr+0x14
-        protArrAdd0x18 = protArr+0x18
-        protArrAdd0x1c = protArr+0x1c
-        protArrAdd0x10 = protArr+0x10
-        count=0
-        while count!=_0x4:
-            // Get current section's memory address by adding base virtual address (0x400000)
-            // and the virtual address offset of the current section
-            // found by looking at IMAGE_SECTION_HEADER.VirtualAddress (offset 0xc) in current section header
-            currSectionVAddr = selfAddr+[currSection+0xc]
-            //Get IMAGE_SECTION_HEADER.Characteristics (offset 0x24) of current section
-            characteristics = [currSection+0x2]
-            //Get IMAGE_SECTION_HEADER.Misc.VirtualSize (offset 0x8) of current section
-            virtualSize = [currSection+0x8]
+    
+    //IMAGE_OPTIONAL_HEADER start = IMAGE_NT_HEADERS addr + size of Signature (0x4) and size of IMAGE_FILE_HEADER (0x14)
+    optionalStart = peHeader+0x18
+    
+    //IMAGE_NT_HEADERS.FileHeader.SizeOfOptionalHeader offset = 0x14
+    sizeOfOptional = [peHeader+0x14]
+    
+    //IMAGE_SECTION_HEADER start = IMAGE_OPTIONAL_HEADER start + IMAGE_FILE_HEADER.SizeOfOptionalHeader
+    currSection = optionalStart+sizeOfOptional
+    
+    protArr = esp+0x98
+    protArrAdd0x14 = protArr+0x14
+    protArrAdd0x18 = protArr+0x18
+    protArrAdd0x1c = protArr+0x1c
+    protArrAdd0x10 = protArr+0x10
+    
+    count=0
+    while count!=_0x4:
+    
+        // Get current section's memory address by adding base virtual address (0x400000)
+        // and the virtual address offset of the current section
+        // found by looking at IMAGE_SECTION_HEADER.VirtualAddress (offset 0xc) in current section header
+        currSectionVAddr = selfAddr+[currSection+0xc]
+    
+        //Get IMAGE_SECTION_HEADER.Characteristics (offset 0x24) of current section
+        characteristics = [currSection+0x2]
+    
+        //Get IMAGE_SECTION_HEADER.Misc.VirtualSize (offset 0x8) of current section
+        virtualSize = [currSection+0x8]
 
-            //Get bit number 31 from IMAGE_SECTION_HEADER.Characteristics
-            //this corresponds to SECTION_CHARACTERISTICS.IMAGE_SCN_MEM_READ
-            isReadable = (characteristics>>0x1e) & 0x1
-            //Get bit number 32 from IMAGE_SECTION_HEADER.Characteristics
-            //this corresponds to SECTION_CHARACTERISTICS.IMAGE_SCN_MEM_WRITE
-            isWriteable = characteristics>>0x1f
-            //Get bit number 30 from IMAGE_SECTION_HEADER.Characteristics
-            //this corresponds to SECTION_CHARACTERISTICS.IMAGE_SCN_MEM_EXECUTE
-            isExecutable = (characteristics>>0x1d) & 0x1
+    
+        //Get bit number 31 from IMAGE_SECTION_HEADER.Characteristics
+        //this corresponds to SECTION_CHARACTERISTICS.IMAGE_SCN_MEM_READ
+        isReadable = (characteristics>>0x1e) & 0x1
+    
+        //Get bit number 32 from IMAGE_SECTION_HEADER.Characteristics
+        //this corresponds to SECTION_CHARACTERISTICS.IMAGE_SCN_MEM_WRITE
+        isWriteable = characteristics>>0x1f
+    
+        //Get bit number 30 from IMAGE_SECTION_HEADER.Characteristics
+        //this corresponds to SECTION_CHARACTERISTICS.IMAGE_SCN_MEM_EXECUTE
+        isExecutable = (characteristics>>0x1d) & 0x1
 
-            //Set up addresses so that when each of the characteristics are added together 
-            //at different bit positions the correct memory protection constant can be retrived
-            //Binary offset 0000:PAGE_NOACCESS(0x1)
-            [protArr] = 0x1
-            //Binary offset 10000:PAGE_READONLY(0x2)
-            [protArrAdd0x10] = 0x2
-            //Binary offset 11000:PAGE_READWRITE(0x4)
-            [protArrAdd0x18] = 0x4
-            //Binary offset 11100:PAGE_EXECUTE_READWRITE(0x40)
-            [protArrAdd0x1c] = 0x40
-            //Binary offset 10100:PAGE_EXECUTE_READ(0x20)
-            [protArrAdd0x14] = 0x20
+    
+        //Set up addresses so that when each of the characteristics are added together 
+        //at different bit positions the correct memory protection constant can be retrived
+        //Binary offset 0000:PAGE_NOACCESS(0x1)
+        [protArr] = 0x1
+        //Binary offset 10000:PAGE_READONLY(0x2)
+        [protArrAdd0x10] = 0x2
+        //Binary offset 11000:PAGE_READWRITE(0x4)
+        [protArrAdd0x18] = 0x4
+        //Binary offset 11100:PAGE_EXECUTE_READWRITE(0x40)
+        [protArrAdd0x1c] = 0x40
+        //Binary offset 10100:PAGE_EXECUTE_READ(0x20)
+        [protArrAdd0x14] = 0x20
 
-            //Add isReadable shifted left 4 bits to get leftmost bit of protArr offset
-            protectionAddr = protArr+(isReadable<<0x4)
-            //Add isWriteable shifted left 3 bits to get second leftmost bit of protArr offset
-            protectionAddr = protectionAddr+(isWriteable<<0x3)
-            //Add isExecutable shifted left 2 bits to get third leftmost bit of protArr offset
-            protectionAddr = protectionAddr+(isExecutable<<0x2)
-            protection = [protectionAddr]
-            VirtualProtect(currSectionVAddr, virtualSize, protection, retAddr)
+        //Add isReadable shifted left 4 bits to get leftmost bit of protArr offset
+        protectionAddr = protArr+(isReadable<<0x4)
+    
+        //Add isWriteable shifted left 3 bits to get second leftmost bit of protArr offset
+        protectionAddr = protectionAddr+(isWriteable<<0x3)
+    
+        //Add isExecutable shifted left 2 bits to get third leftmost bit of protArr offset
+        protectionAddr = protectionAddr+(isExecutable<<0x2)
+        protection = [protectionAddr]
+    
+        VirtualProtect(currSectionVAddr, virtualSize, protection, retAddr)
 
-            count+=1
-            //Move section header to next section header by adding size of IMAGE_SECTION_HEADER to currSectionHeader
-            currSectionAddr+=0x28
+        count+=1
+        //Move section header to next section header by adding size of IMAGE_SECTION_HEADER to currSectionHeader
+        currSectionAddr+=0x28
     checkTLSDirSize(*returnArr)
 
     _0x265e8 = [returnArray+0x44]
@@ -342,6 +356,7 @@ loadImports(dosStart, *returnArr):
                     //Get absolute address of firstThunk (start of list of names)
                     //dosStart + IMAGE_IMPORT_DESCRIPTOR.FirstThunk
                     currFirstThunkAddr = dosStart + [currImportAddr+0xc]
+        
                 nextThunk = [currOriginalThunkAddr]
                 if nextThunk!=0:
                     while nextThunk!=0:
@@ -371,61 +386,66 @@ loadImports(dosStart, *returnArr):
                 currImportNameVAddr= [currImportAddr+0x20]
                 //Move to next import by adding size IMAGE_IMPORT_DESCRIPTOR (0x14)
                 currImportAddr+=0x14
-                    
-
-    return retVar
+        
+    return 1
 
 useRelocTable(dosStart, baseOffset)
     peAddr = getPEHeader_d(dosStart)
-    boolRet=0
-    if peAddr!=0:
-        boolRet=1
-        if baseOffset!=0:
-            //get _IMAGE_NT_HEADERS.OptionalHeader.DataDirectory.Size (offset 0xa4)
-            remainingRelocSize = [peAddr+0xa4]
-            boolRet=1
-            if boolRet==1:
-                //get offset of relocation table 
-                //_IMAGE_NT_HEADERS.OptionalHeader.DataDirectory[5].VirtualAddress (offset 0xa0)
-                relocOffset = [peAddr+0xa0]
-                currBlockAddr = dosStart+relocOffset
-                // IMAGE_BASE_RELOCATION.SizeOfBlock
-                currSizeOfBlock = [dosStart+relocOffset+4]
-                if (currSizeOfBlock!=0 & !(remainingRelocSize<=0)):
-                    boolRet=1
-                    while currBlockAddr!=0 & !(remainingRelocSize<=0):
-                        // IMAGE_BASE_RELOCATION.VirtualAddress
-                        currVAddr = [currBlockAddr]
-                        //Size of block -8 /2 is the number of entries in the relocation table
-                        remainingBlocks = (currSizeOfBlock - 8)/2
-                        if remainingBlocks!=0:
-                            //currVAddr + size of IMAGE_BASE_RELOCATION gets next Block Addr
-                            nextTypeOffsetAddr=currVAddr+0x8
-                            while remainingBlocks-1!=0:
-                                typeAndOffset = [nextTypeOffsetAddr]
-                                //get first byte from typeAndOffset to get just the type
-                                type = typeAndOffset >> 0xc
-                                //get last 3 bytes from typeAndOffset to get offset
-                                offset = typeAndOffset & 0xfff
-                                if type!=0:
-                                    //Adds the offset to baseOffset to get correct virtual memory address for virtual memory constants
-                                    if (type-0x3)==0:
-                                        [dosStart+offset+currVAddr] = [dosStart+offset+currVAddr]+baseOffset
-                                    elif (type-0xA)==0:
-                                        //Not used here
-                                    else:
-                                        break
-                                //Gets next typeOffset address as each is a WORD (0x2) length
-                                nextTypeOffsetAddr+=0x2
-                                //Decrement number of remaining blocks
-                                remainingBlocks-=1
-                            
-                            //Moves to next block in reloc table 
-                            remainingRelocSize-=currSizeOfBlock
-                            currBlockAddr+=currSizeOfBlock
-                            currSizeOfBlock = [currBlockAddr+4]
-                            boolRet=1
-    return boolRet
+    if peAddr!=0 & baseOffset!=0:
+        //get _IMAGE_NT_HEADERS.OptionalHeader.DataDirectory.Size (offset 0xa4)
+        remainingRelocSize = [peAddr+0xa4]
+    
+        //get offset of relocation table 
+        //_IMAGE_NT_HEADERS.OptionalHeader.DataDirectory[5].VirtualAddress (offset 0xa0)
+        relocOffset = [peAddr+0xa0]
+        currBlockAddr = dosStart+relocOffset
+
+        // IMAGE_BASE_RELOCATION.SizeOfBlock
+        currSizeOfBlock = [dosStart+relocOffset+4]
+    
+        if (currSizeOfBlock!=0 & !(remainingRelocSize<=0)):
+    
+            while currBlockAddr!=0 & !(remainingRelocSize<=0):
+    
+                // IMAGE_BASE_RELOCATION.VirtualAddress
+                currVAddr = [currBlockAddr]
+    
+                //Size of block -8 /2 is the number of entries in the relocation table
+                remainingBlocks = (currSizeOfBlock - 8)/2
+                if remainingBlocks!=0:
+    
+                    //currVAddr + size of IMAGE_BASE_RELOCATION gets next Block Addr
+                    nextTypeOffsetAddr=currVAddr+0x8
+    
+                    while remainingBlocks-1!=0:
+                        typeAndOffset = [nextTypeOffsetAddr]
+    
+                        //get first byte from typeAndOffset to get just the type
+                        type = typeAndOffset >> 0xc
+    
+                        //get last 3 bytes from typeAndOffset to get offset
+                        offset = typeAndOffset & 0xfff
+    
+                        if type!=0:
+                            //Adds the offset to baseOffset to get correct virtual memory address for virtual memory constants
+                            if (type-0x3)==0:
+                                [dosStart+offset+currVAddr] = [dosStart+offset+currVAddr]+baseOffset
+                            elif (type-0xA)==0:
+                                //Not used here
+                            else:
+                                break
+
+                        //Gets next typeOffset address as each is a WORD (0x2) length
+                        nextTypeOffsetAddr+=0x2
+    
+                        //Decrement number of remaining blocks
+                        remainingBlocks-=1
+                    
+                    //Moves to next block in reloc table 
+                    remainingRelocSize-=currSizeOfBlock
+                    currBlockAddr+=currSizeOfBlock
+                    currSizeOfBlock = [currBlockAddr+4]
+    return 1
 
 //Different to non decrypted function with similar output
 getPEHeader_d(mem1):
@@ -450,6 +470,7 @@ findFunc_d(dllAddr,funcName):
     ansi_string[1] = lenVar
     returnVar = esp+0xc
     returnVar = 0x0
+    
     // stack location esp+0xc is passed to LdrGetProcedureAddress as the location to put return value
     // address of ANSI string is passed to LdrGetProcedureAddress
     funcAddr = LdrGetProcedureAddress(dllAddr,&ansi_string,0,returnVar)
