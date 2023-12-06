@@ -414,8 +414,8 @@ useRelocTable(dosStart, baseOffset)
                 remainingBlocks = (currSizeOfBlock - 8)/2
                 if remainingBlocks!=0:
     
-                    //currVAddr + size of IMAGE_BASE_RELOCATION gets next Block Addr
-                    nextTypeOffsetAddr=currVAddr+0x8
+                    //currBlockAddr + size of IMAGE_BASE_RELOCATION gets next TypeOffset Addr
+                    nextTypeOffsetAddr=currBlockAddr+0x8
     
                     while remainingBlocks-1!=0:
                         typeAndOffset = [nextTypeOffsetAddr]
