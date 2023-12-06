@@ -392,7 +392,7 @@ loadImports(dosStart, *returnArr):
 useRelocTable(dosStart, baseOffset)
     peAddr = getPEHeader_d(dosStart)
     if peAddr!=0 & baseOffset!=0:
-        //get _IMAGE_NT_HEADERS.OptionalHeader.DataDirectory.Size (offset 0xa4)
+        //get _IMAGE_NT_HEADERS.OptionalHeader.DataDirectory[5].Size (offset 0xa4)
         remainingRelocSize = [peAddr+0xa4]
     
         //get offset of relocation table 
