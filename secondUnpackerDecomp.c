@@ -38,7 +38,7 @@ decrypytedEntry(*returnArr):
     getFuncAddrs(*returnArr)
     LoadLibraryA = [returnArr+0x8]
     user32Addr = LoadLibraryA("user32.dll")
-    EnableMenuItem = findDllFunc_d()
+    EnableMenuItem = findDllFunc_d(user32Addr, "EnableMenuItem")
     //Attempt to grey out menu item 0 in menu at handle 0x1f
     menuReturn = (*EnableMenuItem)(0x1f,0,1)
     // If return value is MF_ENABLED:0 
