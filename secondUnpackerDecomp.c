@@ -193,11 +193,11 @@ changeOrigLDRData(*returnArr):
         _0x85000 = [returnArray+0x48]
         //change the LDR_DATA_TABLE_ENTRY.SizeOfImage for the original program to 0x85000
         [origLDRDataTableAddr+0x20] = _0x85000
-
+    return
 
 getOrigLDRDataTableAddr(*returnArr):
     selfAddr = [returnArr+0x4c]
-    findDLLAddr(0,selfAddr)
+    return findDLLAddr(0,selfAddr)
 
 unpackFunc_d(*returnArr):
     newRWMemPlus0x940f = [returnArr+0x34]
@@ -272,6 +272,7 @@ copyDecrypted_d(newMem, decryptedMem):
     //Get IMAGE_NT_HEADERS.OptionalHeader.SizeOfHeaders
     sizeOfHeaders = [peAddr+0x54]
     newRWMemcpy_d(newMem, decryptedMem, sizeOfHeaders)
+    return
 
 //Almost the same logic as non decrypted
 newMemCpy_d(dst,src,size):
@@ -518,6 +519,7 @@ findDll_d(dllName,arg1):
             else:  
                //Similar enough logic to non decrypted
         }while([nextFlink]!=firstFlink)
+   return
 
 
 //More straightforward than non decrypted
