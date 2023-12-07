@@ -60,7 +60,7 @@ setupAndRunUnpacked(*returnArr):
     VirtualProtect(selfAddr,sizeOfSelf,0x4,retAddr)
 
     //Set original mem to null
-    writeValToMem(selfAddr,0,sizeOfSelf)
+    newMemSet(selfAddr,0,sizeOfSelf)
 
     newestRWMem=[returnArr+0x3c]
 
@@ -68,7 +68,7 @@ setupAndRunUnpacked(*returnArr):
     newMemCpy_d(selfAddr,newestRWMem,_0x85000)
 
     //set decrypted mem to null
-    writeValToMem(newestRWMem,0,_0x85000)
+    newMemSet(newestRWMem,0,_0x85000)
 
     //set first 0x400 bytes to read only permissions
     VirtualProtect(selfAddr,0x400,0x2,retAddr)
@@ -215,7 +215,7 @@ unpackFunc_d(*returnArr):
 
     copyDecrypted_d(newRWMemPlus0x940f,newestRWMem)
 
-    writeValToMem(newRWMemPlus0x940f, 0x00, _0x3f400)
+    newMemSet(newRWMemPlus0x940f, 0x00, _0x3f400)
 
     newestPEAddr = getPEHeader_d(newestRWMem)
 
@@ -235,7 +235,7 @@ unpackFunc_d(*returnArr):
     [newestPEAddr+0xc8] = 0
     return 0
 
-writeValToMem(dst, val, size):
+newMemSet(dst, val, size):
     if size!=0:
         count=0
         while count+1!=size:
