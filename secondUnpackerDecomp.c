@@ -287,9 +287,9 @@ newMemCpy_d(dst,src,size):
 decryptFunc_d(mem1, size):
     count=0
     while count!=0xff:
-        incOffset = 0xAB4014_LongArr[count*4]
+        incOffset = 0x4014_LongArr[count*4]
         while incOffset<size:
-            _0xab3063 = [0xab4010]
+            _0x3063 = [0x4010] //0xXX4010 points to 0xXX3063
             bl = [_0xab3063+(incOffset&0x1f)]
             bh = [mem1+incOffset] - bl
             [mem1+incOffset] = bh
