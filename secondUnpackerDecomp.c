@@ -347,7 +347,7 @@ loadImports(dosStart, *returnArr):
                 if originalThunkVAddr==0:
                     //Get absolute address of firstThunk
                     //dosStart + IMAGE_IMPORT_DESCRIPTOR.FirstThunk
-                    currFirstThunkAddr = dosStart + [currImportAddr+0xc]
+                    currFirstThunkAddr = dosStart + [currImportAddr+0x10]
                     //As original thunk is null first thunk is original
                     currOriginalThunkAddr = currFirstThunkAddr
                 else:
@@ -355,7 +355,7 @@ loadImports(dosStart, *returnArr):
                     currOriginalThunkAddr = dosStart+originalThunkVAddr
                     //Get absolute address of firstThunk (start of list of names)
                     //dosStart + IMAGE_IMPORT_DESCRIPTOR.FirstThunk
-                    currFirstThunkAddr = dosStart + [currImportAddr+0xc]
+                    currFirstThunkAddr = dosStart + [currImportAddr+0x10]
         
                 nextThunk = [currOriginalThunkAddr]
                 if nextThunk!=0:
