@@ -295,6 +295,7 @@ decryptFunc_d(mem1, size):
             [mem1+incOffset] = bh
             incOffset+=0xff
         count+=1
+    return
 
 getFuncAddrs(*returnArr):
     //from 0x1d70_DecryptedToRWX
