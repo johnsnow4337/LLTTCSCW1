@@ -513,7 +513,7 @@ findDll_d(dllName,arg1):
             baseDllLen = [nextFlink+0x24] //LDR_DATA_TABLE_ENTRY.BaseDllName.Length (0x28)
             baseDllBuffPtr = [nextFlink+0x28] //LDR_DATA_TABLE_ENTRY.BaseDllName.Buffer (0x30)
             dllBaseAddrPtr = nextFlink+0x10 //LDR_DATA_TABLE_ENTRY.DllBase (0x18)
-            if [dllBaseAddr] == arg1 && arg1!=0:
+            if [dllBaseAddrPtr] == arg1 && arg1!=0:
                 //Get LDR_DATA_TABLE_ENTRY start address
                 return (nextFlink - 0x8)
             else:  
