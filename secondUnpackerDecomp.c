@@ -505,21 +505,20 @@ findDll_d(dllName,arg1):
     firstFlink = [PEB_LDR_DATA_Ptr + 0x14] //PEB_LDR_DATA_InMemoryOrderModuleList.Flink
     nextFlink = [firstFlink] //PEB_LDR_DATA_InMemoryOrderModuleList.Flink.Flink
    //This logic is in the non decrypted func but not used
-   if firstFlink!=nextFlink: // if the end of the list isn't reached
-        do{
-            bool1 = opt2!=0
-            bool2 = dllname==0
-            //nextFlink = LDR_DATA_TABLE_ENTRY.InMemoryOrderLinks (0x8)
-            baseDllLen = [nextFlink+0x24] //LDR_DATA_TABLE_ENTRY.BaseDllName.Length (0x28)
-            baseDllBuffPtr = [nextFlink+0x28] //LDR_DATA_TABLE_ENTRY.BaseDllName.Buffer (0x30)
-            dllBaseAddrPtr = nextFlink+0x10 //LDR_DATA_TABLE_ENTRY.DllBase (0x18)
-            if [dllBaseAddrPtr] == arg1 && arg1!=0:
-                //Get LDR_DATA_TABLE_ENTRY start address
-                return (nextFlink - 0x8)
-            else:  
-               //Similar enough logic to non decrypted
-                nextFlink = [nextFlink]
-        }while([nextFlink]!=firstFlink)
+    while nextFlink!=firstFlink: // if the end of the list isn't reached
+        bool1 = opt2!=0
+        bool2 = dllname==0
+        //nextFlink = LDR_DATA_TABLE_ENTRY.InMemoryOrderLinks (0x8)
+        baseDllLen = [nextFlink+0x24] //LDR_DATA_TABLE_ENTRY.BaseDllName.Length (0x28)
+        baseDllBuffPtr = [nextFlink+0x28] //LDR_DATA_TABLE_ENTRY.BaseDllName.Buffer (0x30)
+        dllBaseAddrPtr = nextFlink+0x10 //LDR_DATA_TABLE_ENTRY.DllBase (0x18)
+        if [dllBaseAddrPtr] == arg1 && arg1!=0:
+            //Get LDR_DATA_TABLE_ENTRY start address
+            return (nextFlink - 0x8)
+        else:  
+           //Similar enough logic to non decrypted
+        nextFlink = [nextFlink]
+        
    return
 
 
