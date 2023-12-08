@@ -514,8 +514,8 @@ findDll_d(dllName,arg1):
             baseDllBuffPtr = [nextFlink+0x28] //LDR_DATA_TABLE_ENTRY.BaseDllName.Buffer (0x30)
             dllBaseAddrPtr = nextFlink+0x10 //LDR_DATA_TABLE_ENTRY.DllBase (0x18)
             if [dllBaseAddr] == arg1 && arg1!=0:
-                //Get LDR_DATA_TABLE_ENTRY address
-                return (nextFlink & 0xFFFFFFF8)
+                //Get LDR_DATA_TABLE_ENTRY start address
+                return (nextFlink - 0x8)
             else:  
                //Similar enough logic to non decrypted
                 nextFlink = [nextFlink]
