@@ -14,7 +14,7 @@
     //[returnArr+0x30] = *RemoveVectoredExceptionHandler
 //Assigned in 0x3520_startUnpacking [esp+0x58/0x5c] = [returnArr+0x34/0x38]
     //[returnArr+0x34] = [arrayOfResults] = newRWMem+0x940f
-    //[returnArr+0x38] = [arrayOfResults+0x4] = 0x3f400
+    //[returnArr+0x38] = 0x3f400
 //from unpackFunc_d
     //[returnArray+0x3c]=newestRWMem
     //[returnArray+0x40]=0x4
