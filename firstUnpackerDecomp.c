@@ -417,15 +417,15 @@
                         break
                 else:
                     break
-
-            if equalsExpected==0:
-                nextFlink = [nextFlink] // increment dll
-            else:
-                //Return the base address of the dll
-                dllBaseAddr = [loadOrderNextFlink+0x18]
-                return dllBaseAddr
         else:
             //There is more logic here but its never used in this stage
+    
+        if equalsExpected==0:
+            nextFlink = [nextFlink] // increment dll
+        else:
+            //Return the base address of the dll
+            dllBaseAddr = [loadOrderNextFlink+0x18]
+            return dllBaseAddr
 
 //Get the address of the Process Environment Block of current process
 0x3120_getPEB:
