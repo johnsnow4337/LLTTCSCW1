@@ -518,6 +518,7 @@ findDll_d(dllName,arg1):
                 return (nextFlink & 0xFFFFFFF8)
             else:  
                //Similar enough logic to non decrypted
+                nextFlink = [nextFlink]
         }while([nextFlink]!=firstFlink)
    return
 
