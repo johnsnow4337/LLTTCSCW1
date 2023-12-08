@@ -70,7 +70,7 @@ setupAndRunUnpacked(*returnArr):
     //set decrypted mem to null
     newMemSet(newestRWMem,0,_0x85000)
 
-    //set first 0x400 bytes to read only permissions
+    //set first 0x400 bytes (size of image headers) to read only permissions
     VirtualProtect(selfAddr,0x400,0x2,retAddr)
     peHeader = getPEHeader_d(selfAddr)
     
