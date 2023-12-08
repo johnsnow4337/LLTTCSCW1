@@ -197,7 +197,7 @@ changeOrigLDRData(*returnArr):
 
 getOrigLDRDataTableAddr(*returnArr):
     selfAddr = [returnArr+0x4c]
-    return findDLLAddr(0,selfAddr)
+    return findDLL_d(0,selfAddr)
 
 unpackFunc_d(*returnArr):
     newRWMemPlus0x940f = [returnArr+0x34]
