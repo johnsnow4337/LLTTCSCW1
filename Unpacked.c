@@ -36,6 +36,9 @@ int exeChecksum
 //Functions have been moved around for readablity purposes but shouldn't affect the logic
 wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nShowCmd):
 
+    GdiPlusStartup()
+    getPngImageEncoder()
+ 
     //Store Version Information
     _memset(&lpVersionInformation,0,0x11c)
     lpVersionInformation = 0x11c
@@ -152,167 +155,6 @@ wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nShowCm
         return 1
     
     stage2()
-
-stage2():
-    _memset(0x43fd58,0 , 0x15c)
-
-    retVal = doSomeRegediting()
-
-
-BYTE xxxsysID
-wchar_t xxxsysID_Str
-void* funcAddrsPtr
-funcAddrs = [call0x1c180, call0x1c510, resetVars, func0x1c180]
-doSomeRegediting():
-    keyHandle = 0
-    //This will return ERROR_BAD_PATHNAME *0xA1 (161)* As:
-    //https://asmsource1.tripod.com/proccalls/proc-RegCreateKeyEx.htm
-    //Windows NT/2000: The subkey name specified by lpSubKey must not begin with the backslash character ('\'). If it does, ERROR_BAD_PATHNAME is returned.
-    //Windows 95/98: Beginning backslash characters in the subkey name specified by lpSubKey are ignored.
-    retVal = RegCreateKeyExW(HKEY_USERS /*0x80000003*/, L"\\S-1-5-18\\Software\\xxxsys\\", 0, NULL,
-                                REG_OPTION_NON_VOLATILE /*0x00*/, 
-                                    KEY_READ /*0x20019*/ /*READ_CONTROL 0x20000 | KEY_NOTIFY 0x10 | KEY_ENUMERATE_SUB_KEYS 0x8 | KEY_QUERY_VALUE 0x1*/, NULL
-                                        &keyHandle, NULL)
-    
-    //Most likely never called
-    if retVal == ERROR_SUCCESS /*0x00*/:
-        type = 0
-        size = 0
-        retVal = RegQueryValueExW(keyHandle, L"ID", NULL, &type, &xxxsysID, &size)
-        if retVal = ERROR_SUCCESS /*0x00*/:
-            xxxsysID_StrHigh = ""
-            call_vsnwprintf(&xxxsysID_Str, 0x18, L"%X%X%X%X", xxxsysID[0], xxxsysID[1], xxxsysID[2], xxxsysID[3]) //Store string value of low bits into global *xxxsysID_Str*
-            call_vsnwprintf(&xxxsysID_StrHigh, 0x18, L"%X%X%X%X", xxxsysID[4], xxxsysID[5], xxxsysID[6], xxxsysID[7]) // store string value of high bits into *xxxsysID_StrHigh*
-            _wcscat_s(&xxxsysID_Str, 0x18, &xxxsysID_StrHigh) //Concatonate low and high parts of the xxxsys ID to get the full string value of the ID
-            RegCloseKey(keyHandle)
-            return 1
-    
-    RegCreateKeyExW(HKEY_CURRENT_USER /*0x80000001*/, L"Software\\xxxsys\\", 0, NULL,
-                     REG_OPTION_NON_VOLATILE /*0x00*/, 
-                        0x2001f /*READ_CONTROL 0x20000 | KEY_NOTIFY 0x10 | KEY_ENUMERATE_SUB_KEYS 0x8 | 
-                                KEY_CREATE_SUB_KEY 0x4 | KEY_SET_VALUE 0x2 | KEY_QUERY_VALUE 0x1*/, NULL
-                            &keyHandle, NULL)
-    retVal = RegQueryValueExW(keyHandle, L"ID", NULL, &type, &xxxsysID, &size)
-    if retVal != ERROR_SUCCESS /*0x00*/:
-        if funcAddrsPtr == 0x0:
-            funcAddrsPtr = &funcAddrs
-        if funcAddrsPtr[1] /*call0x1c510*/ != 0x00:
-            call0x1c510(&xxxsysID, 8)
-
-ranOnce = FALSE
-
-call0x1c510(char* dst, int size):
-    func0x1c510(dst, size)
-func0x1c510(char* dst, int,size):
-    if size<=0:
-        return 1
-    
-    //Essentially zeroes the 1s digit and increases value of the tens digit by 1
-    //Which boils down to this formula: ((size-1)//10) + 1) * 10
-    edx:eax = 0x66666667*(size-1)
-    edx = edx >> 2
-    eax = edx + 1
-    esi = eax+ eax*4
-    esi = esi + esi
-
-    if ranOnce == FALSE:
-        runOnce()
-        ranOnce = TRUE
-
-runOnce():
-    OSVERSIONINFOW lpVersionInformation;
-    lpVersionInformation.dwOSVersionInfoSize = 0x114
-    GetVersionExW(&lpVersionInformation)
-    advapi32H = LoadLibraryW("ADVAPI32.DLL")
-    kernel32H = LoadLibraryW("KERNEL32.DLL")
-    netapi32H = LoadLibraryW("NETAPI32.DLL")
-    if netapi32H != 0:
-        NetStatisticsGet = GetProcAddress(netapi32H, "NetStatisticsGet")
-        NetApiBufferFree = GetProcAddress(netapi32H, "NetApiBufferFree")
-        if NetStatisticsGet != 0x00 && NetApiBufferFree != 0x00:
-            _STAT_WORKSTATION_0 workstationStats;
-            retVal = NetStatisticsGet(NULL, SERVICE_WORKSTATION /*L"LanmanWorkstation"*/, 0, 0, &workstationStats)
-            if retVal == NERR_Success /*0x00*/:
-                if funcAddrsPtr == 0x00:
-                    funcAddrsPtr = &funcAddrs
-                if funcAddrsPtr[3] /*func0x1c180*/ != 0x00:
-                    func0x1c180(&workstationStats, 0xd8, 45.0)
-
-func0x1c180(_STAT_WORKSTATION_0* netStats, int int1 , double double1):
-    [0x460784] = [0x460784] + int1
-    if [0x460784] < 0x3ff:
-        if [0x460780] < 0x3ff && [0x460780] < [0x460784] :
-            [0x460780] = [0x460784]
-    else:
-        a = (([0x460784] * 0x7fdff7fd) >> 0x20) - [0x460784]
-        [0x460784] = [0x460784] + (((a >> 9) - (a >> 0x1f)) * 0x3ff)
-    [0x46078c] = [0x46078c] + (0 < int1 % 0x14) + int1 / 0x14
-
-    if int1>0:
-        storeInt = ((int1 -1) / 0x14) + 1
-        int1Store = int1
-        if int1>0x14:
-            int1Store = 0x14
-        cbVar = 0
-        func0x1b160("@", &cbVar)
-
-func0x1b160(char* @, char** stringArr):
-    stringArr[2] = stringArr[2] & 0xfffffffd
-    string1 = stringArr[0]
-    if string1 != &@:
-        if string1 != 0x00 && string1[0x44] != 0x00:
-            string3 = stringArr[3]
-            if [0x480188] != 0x00:
-                [0x480188](string3,0)
-            _free(string3)
-            if [0x480188] != 0x00:
-                [0x480188](0,1)
-        stringArr[0] = &@
-        if (stringArr[2] & 0x100) == 0 && @[0x44] != 0x00:
-            stringArr[5] = @[0x14]
-            if @[0x44] < 1:
-                mallocAddr = 0x00
-            else:
-                mallocAddr = func0x230b0(@[0x44])
-            stringArr[3] = mallocAddr
-            if mallocAddr == 0x00:
-                return 0
-    func0x1b2b0 = stringArr[4]
-    if (func0x1b2b0 != 0x00) && ([func0x1b2b0] != 0x00):
-        funcAddr = [func0x1b2b0+100]
-        if funcAddr != 0x00: 
-            retVal = funcAddr(stringArr[4],7,0,&stringArr)
-            if (stringArr[8] == 0x00 || (stringArr[8] & 0xf8) == 0x00 || retVal < 1) && retVal != -2:
-                return 0
-    if stringArr[2] & 0x100 == 0x00:
-                /*func0x1b2b0*/
-        retVal = stringArr[4](stringArr)
-        return retVal
-    return 1
-
-func0x1b2b0(int dst_)
-    dst = dst_ + 0xc
-    _memset(dst, 0x00, 0x60)
-    dst[0] = 0x67452301
-    dst[0x4] = 0xefcdab89
-    dst[0x8] = 0x98badcfe
-    dst[0xc] = 0x10325476
-    dst[0x10] = 0xc3d2e1f0
-    return 1
-
-func0x230b0(int size):
-    [0x43dee0] = 0x00
-    if [0x480184] != 0x00:
-        [0x43dee4] = 0x00
-        [0x480184](0)
-    mallocAddr = _malloc(size)
-    if [0x480184] != 0x00:
-        [0x480184](mallocAddr, size, )
-
-    if mallocAddr != 0x00 && size > 0x800:
-        [mallocAddr] = 0x46077d
-    return mallocAddr
-
 
 //Adds the current process to startup using registry editing
 addToStartup():
@@ -890,3 +732,164 @@ getRandStr(wchar_t* dst, int length);
 
     [dst+length*2] = '\0'
     return
+
+//There wasn't enough time to reverse the rest so here is a partial reversing of the rest
+stage2():
+    _memset(0x43fd58,0 , 0x15c)
+
+    retVal = doSomeRegediting()
+
+
+BYTE xxxsysID
+wchar_t xxxsysID_Str
+void* funcAddrsPtr
+funcAddrs = [call0x1c180, callGenRandom, resetVars, func0x1c180]
+doSomeRegediting():
+    keyHandle = 0
+    //This will return ERROR_BAD_PATHNAME *0xA1 (161)* As:
+    //https://asmsource1.tripod.com/proccalls/proc-RegCreateKeyEx.htm
+    //Windows NT/2000: The subkey name specified by lpSubKey must not begin with the backslash character ('\'). If it does, ERROR_BAD_PATHNAME is returned.
+    //Windows 95/98: Beginning backslash characters in the subkey name specified by lpSubKey are ignored.
+    retVal = RegCreateKeyExW(HKEY_USERS /*0x80000003*/, L"\\S-1-5-18\\Software\\xxxsys\\", 0, NULL,
+                                REG_OPTION_NON_VOLATILE /*0x00*/, 
+                                    KEY_READ /*0x20019*/ /*READ_CONTROL 0x20000 | KEY_NOTIFY 0x10 | KEY_ENUMERATE_SUB_KEYS 0x8 | KEY_QUERY_VALUE 0x1*/, NULL
+                                        &keyHandle, NULL)
+    
+    //Most likely never called
+    if retVal == ERROR_SUCCESS /*0x00*/:
+        type = 0
+        size = 0
+        retVal = RegQueryValueExW(keyHandle, L"ID", NULL, &type, &xxxsysID, &size)
+        if retVal = ERROR_SUCCESS /*0x00*/:
+            xxxsysID_StrHigh = ""
+            call_vsnwprintf(&xxxsysID_Str, 0x18, L"%X%X%X%X", xxxsysID[0], xxxsysID[1], xxxsysID[2], xxxsysID[3]) //Store string value of low bits into global *xxxsysID_Str*
+            call_vsnwprintf(&xxxsysID_StrHigh, 0x18, L"%X%X%X%X", xxxsysID[4], xxxsysID[5], xxxsysID[6], xxxsysID[7]) // store string value of high bits into *xxxsysID_StrHigh*
+            _wcscat_s(&xxxsysID_Str, 0x18, &xxxsysID_StrHigh) //Concatonate low and high parts of the xxxsys ID to get the full string value of the ID
+            RegCloseKey(keyHandle)
+            return 1
+    
+    RegCreateKeyExW(HKEY_CURRENT_USER /*0x80000001*/, L"Software\\xxxsys\\", 0, NULL,
+                     REG_OPTION_NON_VOLATILE /*0x00*/, 
+                        0x2001f /*READ_CONTROL 0x20000 | KEY_NOTIFY 0x10 | KEY_ENUMERATE_SUB_KEYS 0x8 | 
+                                KEY_CREATE_SUB_KEY 0x4 | KEY_SET_VALUE 0x2 | KEY_QUERY_VALUE 0x1*/, NULL
+                            &keyHandle, NULL)
+    retVal = RegQueryValueExW(keyHandle, L"ID", NULL, &type, &xxxsysID, &size)
+    if retVal != ERROR_SUCCESS /*0x00*/:
+        if funcAddrsPtr == 0x0:
+            funcAddrsPtr = &funcAddrs
+        if funcAddrsPtr[1] /*callGenRandom*/ != 0x00:
+            callGenRandom(&xxxsysID, 8)
+
+ranOnce = FALSE
+
+callGenRandom(char* dst, int size):
+    genRandom(dst, size)
+genRandom(char* dst, int,size):
+    if size<=0:
+        return 1
+    
+    //Essentially zeroes the 1s digit and increases value of the tens digit by 1
+    //Which boils down to this formula: ((size-1)//10) + 1) * 10
+    edx:eax = 0x66666667*(size-1)
+    edx = edx >> 2
+    eax = edx + 1
+    esi = eax+ eax*4
+    esi = esi + esi
+
+    if ranOnce == FALSE:
+        setupDataSources()
+        ranOnce = TRUE
+
+setupDataSources():
+    OSVERSIONINFOW lpVersionInformation;
+    lpVersionInformation.dwOSVersionInfoSize = 0x114
+    GetVersionExW(&lpVersionInformation)
+    advapi32H = LoadLibraryW("ADVAPI32.DLL")
+    kernel32H = LoadLibraryW("KERNEL32.DLL")
+    netapi32H = LoadLibraryW("NETAPI32.DLL")
+    if netapi32H != 0:
+        NetStatisticsGet = GetProcAddress(netapi32H, "NetStatisticsGet")
+        NetApiBufferFree = GetProcAddress(netapi32H, "NetApiBufferFree")
+        if NetStatisticsGet != 0x00 && NetApiBufferFree != 0x00:
+            _STAT_WORKSTATION_0 workstationStats;
+            retVal = NetStatisticsGet(NULL, SERVICE_WORKSTATION /*L"LanmanWorkstation"*/, 0, 0, &workstationStats)
+            if retVal == NERR_Success /*0x00*/:
+                if funcAddrsPtr == 0x00:
+                    funcAddrsPtr = &funcAddrs
+                if funcAddrsPtr[3] /*func0x1c180*/ != 0x00:
+                    func0x1c180(&workstationStats, 0xd8, 45.0)
+
+func0x1c180(_STAT_WORKSTATION_0* netStats, int int1 , double double1):
+    [0x460784] = [0x460784] + int1
+    if [0x460784] < 0x3ff:
+        if [0x460780] < 0x3ff && [0x460780] < [0x460784] :
+            [0x460780] = [0x460784]
+    else:
+        a = (([0x460784] * 0x7fdff7fd) >> 0x20) - [0x460784]
+        [0x460784] = [0x460784] + (((a >> 9) - (a >> 0x1f)) * 0x3ff)
+    [0x46078c] = [0x46078c] + (0 < int1 % 0x14) + int1 / 0x14
+
+    if int1>0:
+        storeInt = ((int1 -1) / 0x14) + 1
+        int1Store = int1
+        if int1>0x14:
+            int1Store = 0x14
+        cbVar = 0
+        func0x1b160("@", &cbVar)
+
+func0x1b160(char* @, char** stringArr):
+    stringArr[2] = stringArr[2] & 0xfffffffd
+    string1 = stringArr[0]
+    if string1 != &@:
+        if string1 != 0x00 && string1[0x44] != 0x00:
+            string3 = stringArr[3]
+            if [0x480188] != 0x00:
+                [0x480188](string3,0)
+            _free(string3)
+            if [0x480188] != 0x00:
+                [0x480188](0,1)
+        stringArr[0] = &@
+        if (stringArr[2] & 0x100) == 0 && @[0x44] != 0x00:
+            stringArr[5] = @[0x14]
+            if @[0x44] < 1:
+                mallocAddr = 0x00
+            else:
+                mallocAddr = func0x230b0(@[0x44])
+            stringArr[3] = mallocAddr
+            if mallocAddr == 0x00:
+                return 0
+    func0x1b2b0 = stringArr[4]
+    if (func0x1b2b0 != 0x00) && ([func0x1b2b0] != 0x00):
+        funcAddr = [func0x1b2b0+100]
+        if funcAddr != 0x00: 
+            retVal = funcAddr(stringArr[4],7,0,&stringArr)
+            if (stringArr[8] == 0x00 || (stringArr[8] & 0xf8) == 0x00 || retVal < 1) && retVal != -2:
+                return 0
+    if stringArr[2] & 0x100 == 0x00:
+                /*func0x1b2b0*/
+        retVal = stringArr[4](stringArr)
+        return retVal
+    return 1
+
+func0x1b2b0(int dst_)
+    dst = dst_ + 0xc
+    _memset(dst, 0x00, 0x60)
+    dst[0] = 0x67452301
+    dst[0x4] = 0xefcdab89
+    dst[0x8] = 0x98badcfe
+    dst[0xc] = 0x10325476
+    dst[0x10] = 0xc3d2e1f0
+    return 1
+
+func0x230b0(int size):
+    [0x43dee0] = 0x00
+    if [0x480184] != 0x00:
+        [0x43dee4] = 0x00
+        [0x480184](0)
+    mallocAddr = _malloc(size)
+    if [0x480184] != 0x00:
+        [0x480184](mallocAddr, size, )
+
+    if mallocAddr != 0x00 && size > 0x800:
+        [mallocAddr] = 0x46077d
+    return mallocAddr
