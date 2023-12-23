@@ -8,6 +8,7 @@ def getEncOut(string):
 
 genHashes = True
 saveHashes = False
+useSaved = False
 exportFiles = ["kernel32hashes.txt","advapi32hashes.txt"]
 hashDict = []
 hashDictReverse= []
@@ -48,7 +49,7 @@ if genHashes:
                     started = True
         if saveHashes:
             f2.close()
-else:
+elif useSaved:
     for dictionary in exportFiles:
         f = open(dictionary, "r")
         lines = f.readlines()
@@ -83,11 +84,13 @@ def findHash(dictionary, key):
             return errMsg
 
 
-result = getEncOut("GetModuleHandleA")
+""" result = getEncOut("GetModuleHandleA")
 print(hex(result))
 print(result == 0x4b1ffe8e)
 print(findHash(hashDict, 0xa48d6762))
 print(findHash(hashDict, 0x72760bb8))
+print(findHash(hashDictReverse, "GetModuleHandleA")) """
+
 
 interactive = True
 if interactive:
