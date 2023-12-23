@@ -82,11 +82,11 @@ while long1 < asciiLen:
 	long2+=1
 
 	if long2 < thrQutrLen:
-		 thrQutrArr.append(byte23Or)
-		 long2 = long2 + 1
+		thrQutrArr.append(byte23Or)
+		long2 = long2 + 1
 	if long2 < thrQutrLen:
-         thrQutrArr.append(byte34Or) 
-         long2 = long2 + 1
+		thrQutrArr.append(byte34Or) 
+		long2 = long2 + 1
 print("thrQutrArr: ")
 print(thrQutrArr)
 

