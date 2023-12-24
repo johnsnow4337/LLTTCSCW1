@@ -896,3 +896,4 @@ func0x230b0(int size):
     if mallocAddr != 0x00 && size > 0x800:
         [mallocAddr] = 0x46077d
     return mallocAddr
+

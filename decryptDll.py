@@ -9,12 +9,21 @@ def getEncOut(string):
 genHashes = True
 saveHashes = False
 useSaved = False
-exportFiles = ["kernel32hashes.txt","advapi32hashes.txt"]
+useDefaultNames = True
+if useDefaultNames:
+    dlls = ["kernel32", "advapi32", "shell32"]
+    exportFiles = []
+    dllExports = []
+    for i in dlls:
+        exportFiles.append(i+"hashes.txt")
+        dllExports.append(i+"out.txt")
+else:
+    exportFiles = ["kernel32hashes.txt","advapi32hashes.txt", "shell32hashes.txt"]
+    dllExports = ["kernel32out.txt", "advapi32out.txt", "shell32out.txt"] #Files generated from VS code's dumpbin /Export {DLL_PATH}
 hashDict = []
 hashDictReverse= []
 
 if genHashes:
-    dllExports = ["kernel32out.txt", "advapi32out.txt"] #Files generated from VS code's dumpbin /Export {DLL_PATH}
     for i in range(len(dllExports)):
         hashDict.append({})
         hashDictReverse.append({})
@@ -71,17 +80,17 @@ elif useSaved:
 def findHash(dictionary, key):
     errMsg = "Not Found"
     if isinstance(dictionary, list):
-        for i in dictionary:
+        for i in range(len(dictionary)):
             try:
-                return i[key]
+                return [dictionary[i][key], i]
             except:
                 continue
         return errMsg
     else:
         try:
-            return dictionary[key]
+            return [dictionary[key], 0]
         except:
-            return errMsg
+            return [errMsg,-1]
 
 
 """ result = getEncOut("GetModuleHandleA")
@@ -97,19 +106,22 @@ if interactive:
     while True:
         print("Enter the export or hash to find: ")
         keyInput = input()
-        print("\nThe result is: ")
         try:
             keyInput = int(keyInput)
-            print(findHash(hashDict, keyInput))
         except:
             try:
                 keyInput = int(keyInput,16)
-                print(findHash(hashDict, keyInput))
             except:
-                result = findHash(hashDictReverse, keyInput)
-                try:
-                    for i in result:
-                        print(hex(i))
-                except:
-                    print(result)
+                pass
+        result = findHash(hashDict, keyInput)
+        if useDefaultNames and result[1]!=-1:
+            print("\nFound function(s) in DLL: "+dlls[result[1]])
+            
+            try:
+                for i in result[0]:
+                    print(hex(i))
+            except:
+                print(result[0])
+        else:
+            print("\n"+result[0])
         print()
