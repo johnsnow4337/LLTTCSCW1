@@ -11,7 +11,7 @@ saveHashes = False
 useSaved = False
 useDefaultNames = True
 if useDefaultNames:
-    dlls = ["kernel32", "advapi32", "shell32"]
+    dlls = ["kernel32", "advapi32", "shell32", "netapi32", "wininet"]
     exportFiles = []
     dllExports = []
     for i in dlls:
@@ -85,7 +85,7 @@ def findHash(dictionary, key):
                 return [dictionary[i][key], i]
             except:
                 continue
-        return errMsg
+        return [errMsg,-1]
     else:
         try:
             return [dictionary[key], 0]

@@ -83,6 +83,7 @@ if findEncrypted:
     storeEncrypted(0x0434850)
     storeEncrypted(0x04347f8)
     storeEncrypted(0x04347a0)
+    storeEncrypted(0x0434750)
     storeEncrypted(0x0434714)
     storeEncrypted(0x04346c8)
     storeEncrypted(0x0434670)
@@ -92,46 +93,49 @@ if findEncrypted:
 
         
 if decrypt:
-    f = open("encryptedStrsJustNew.txt","r")
+    f = open("encryptedStrsNoExt.txt","r")
     readEncrypted = f.read()
     f.close()
     f = open("decryptedStrs.txt","w")
     f.close()
+    count = 1
     for ciphertext in readEncrypted.split(":::\n"):
         #This should work but doesn't so I have resorted to using a website that does
         #cipher = ARC2.new(key, ARC2.MODE_CBC, iv)
         #text = cipher.decrypt(ciphertext)
         url = 'https://www.lddgo.net/api/RC2?lang=en'
         split = ciphertext.split(":::")
-        payload = {
-            "inputContent": split[0],
-            "model": "CBC",
-            "padding": "pkcs5padding",
-            "inputPassword": key.decode("ascii"),
-            "inputIv": split[1],
-            "inputFormat": "hex",
-            "outputFormat": "hex",
-            "charset": "UTF-8",
-            "encrypt": 'false'
-        }
+        if len(split)>1:
+            payload = {
+                "inputContent": split[0],
+                "model": "CBC",
+                "padding": "pkcs5padding",
+                "inputPassword": key.decode("ascii"),
+                "inputIv": split[1],
+                "inputFormat": "hex",
+                "outputFormat": "hex",
+                "charset": "UTF-8",
+                "encrypt": 'false'
+            }
 
-        headers = {
-            'Content-Type': 'application/json'
-        }
+            headers = {
+                'Content-Type': 'application/json'
+            }
 
 
-        while True:
-            try:
-                response = requests.post(url, data=json.dumps(payload), headers=headers)
-                time.sleep(0.5)
-                print(response.text)
-                decrypted = json.loads(response.text)['data']
-                decryptedStr = bytes.fromhex(decrypted).decode("ascii")
-                print("decrypted: "+decryptedStr)
-                f = open("decryptedStrs.txt","a")
-                f.write(decryptedStr+"\n")
-                f.close()
-                print()
-                break
-            except json.decoder.JSONDecodeError:
-                continue
+            while True:
+                try:
+                    response = requests.post(url, data=json.dumps(payload), headers=headers)
+                    time.sleep(0.5)
+                    print(response.text)
+                    decrypted = json.loads(response.text)['data']
+                    decryptedStr = bytes.fromhex(decrypted).decode("ascii")
+                    print("decrypted: "+decryptedStr)
+                    f = open("decryptedStrs.txt","a")
+                    f.write(str(count)+":  "+decryptedStr[:-1]+"\n")
+                    count+=1
+                    f.close()
+                    print()
+                    break
+                except json.decoder.JSONDecodeError:
+                    continue

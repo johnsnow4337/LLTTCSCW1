@@ -34,12 +34,12 @@
 .vfs0
 .mcmeta
 .m2
-.Irf
+.lrf
 .vpp_pc
 .ff
 .cfr
 .snx
-.Iv
+.lvl
 .arch00
 .ntl
 .xlsx
@@ -85,7 +85,7 @@
 .Sis
 .ztmp
 .bsa
-.Itx
+.ltx
 .forge
 .asset
 .litemod
