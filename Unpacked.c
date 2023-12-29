@@ -771,6 +771,7 @@ doSomeRegediting():
             RegCloseKey(keyHandle)
             return 1
     
+    //HKEY_CURRENT_USER\Software\xxxsys\
     RegCreateKeyExW(HKEY_CURRENT_USER /*0x80000001*/, L"Software\\xxxsys\\", 0, NULL,
                      REG_OPTION_NON_VOLATILE /*0x00*/, 
                         0x2001f /*READ_CONTROL 0x20000 | KEY_NOTIFY 0x10 | KEY_ENUMERATE_SUB_KEYS 0x8 | 
