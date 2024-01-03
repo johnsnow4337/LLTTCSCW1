@@ -133,7 +133,7 @@ rule LLTTCS_DOCM_Dropper_DecryptedStrings
         $GET = "GET" nocase wide ascii
 
         $ADODB1_1 = "AD" nocase wide ascii
-        $ADODB2_2 = "ODB.Stream" nocase wide ascii
+        $ADODB1_2 = "ODB.Stream" nocase wide ascii
 
         $FilePath1_1 = "C:\\\\Windows\\\\T" nocase wide ascii
         $FilePath1_2 = "emp\\\\ms457.exe" nocase wide ascii
