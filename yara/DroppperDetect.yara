@@ -66,6 +66,7 @@ rule LLTTCS_DOCM_Dropper_WritingRegistry_Strings
         (all of ($registryKeys*)) and $RegWrite
 }
 
+/*/
 import "cuckoo"
 
 rule LLTTCS_DOCM_Dropper_WritingRegistry_Cuckoo
@@ -85,7 +86,7 @@ rule LLTTCS_DOCM_Dropper_WritingRegistry_Cuckoo
         cuckoo.registry.key_access(/\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\ProtectedView\\DisableAttachementsInPV/i) and
         cuckoo.registry.key_access(/\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\ProtectedView\\DisableUnsafeLocationsInPV/i)
 }
-
+/*/
 rule LLTTCS_DOCM_Dropper_AutoOpensShell
 {
     meta:
