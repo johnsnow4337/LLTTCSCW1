@@ -1,3 +1,5 @@
+
+
 rule LLTTCS_DOCM_Dropper_DocumentVariable
 {
     meta:
@@ -7,8 +9,9 @@ rule LLTTCS_DOCM_Dropper_DocumentVariable
         file_type1 = "xml"
         file_type2 = "bin"
         date = "03/Jan/2024"
-        md5hash1 = "d23416409d10ffed565b071bbd84f969"
-        md5hash2 = "7cbefc1d052d5ca36e928827dbdca7f9"
+        //docm md5hash : "8b404aca7e0ded3145f8a696e2f94a58"
+        md5hash_settingsxml = "d23416409d10ffed565b071bbd84f969"
+        md5hash_vbaProjectbin = "7cbefc1d052d5ca36e928827dbdca7f9"
         
     strings:
         $docVarName = "kBQHAjmEelVSHUyT" fullword wide ascii
@@ -17,7 +20,7 @@ rule LLTTCS_DOCM_Dropper_DocumentVariable
         $docVarName or $docVarVal
 }
 
-rule LLTTCS_DOCM_Dropper_MacroStrings
+rule LLTTCS_DOCM_Dropper_WritingRegistry
 {
     meta:
         source = "u2150600"
@@ -25,19 +28,20 @@ rule LLTTCS_DOCM_Dropper_MacroStrings
         origin_malware = "Teslacrypt v3.0.1"
         file_type = "bin"
         date = "03/Jan/2024"
-        md5hash2 = "7cbefc1d052d5ca36e928827dbdca7f9"
+        //docm md5hash : "8b404aca7e0ded3145f8a696e2f94a58"
+        md5hash_vbaProjectbin = "7cbefc1d052d5ca36e928827dbdca7f9"
         
     strings:
         $registryKeys_VBAWarnings = /HKCU\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\VBAWarnings/ nocase wide ascii
         $registryKeys_DisableInternetFilesInPV = /HKCU\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\ProtectedView\\DisableInternetFilesInPV/ nocase wide ascii
         $registryKeys_DisableAttachementsInPV = /HKCU\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\ProtectedView\\DisableAttachementsInPV/ nocase wide ascii
         $registryKeys_DisableUnsafeLocationsInPV = /HKCU\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\ProtectedView\\DisableUnsafeLocationsInPV/ nocase wide ascii
-
+        $RegWrite = "RegWrite" nocase wide ascii
     condition:
-        all of ($registryKeys*)
+        (all of ($registryKeys*)) and $RegWrite
 }
 
-rule LLTTCS_DOCM_Dropper_RunsShellAndAutoOpen
+rule LLTTCS_DOCM_Dropper_AutoOpensShell
 {
     meta:
         source = "u2150600"
@@ -45,7 +49,8 @@ rule LLTTCS_DOCM_Dropper_RunsShellAndAutoOpen
         origin_malware = "Teslacrypt v3.0.1"
         file_type = "bin"
         date = "03/Jan/2024"
-        md5hash2 = "7cbefc1d052d5ca36e928827dbdca7f9"
+        //docm md5hash : "8b404aca7e0ded3145f8a696e2f94a58"
+        md5hash_vbaProjectbin = "7cbefc1d052d5ca36e928827dbdca7f9"
         
     strings:
         $AutoOpen = "AutoOpen" fullword ascii
