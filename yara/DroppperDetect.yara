@@ -1,3 +1,4 @@
+import "cuckoo"
 
 //(evild3ad, 2016)
 rule Contains_VBA_macro_code
@@ -9,7 +10,10 @@ rule Contains_VBA_macro_code
 		filetype = "Office documents"
         //Added md5 hash of 'Anual Report.docm'
         md5hash_docm = "8b404aca7e0ded3145f8a696e2f94a58"
-        
+        md5hash_vbaProjectbin = "7cbefc1d052d5ca36e928827dbdca7f9"
+        //Added indicator strength
+        indicator_strength = 10
+        indicator_generality = 90
 	strings:
 		$officemagic = { D0 CF 11 E0 A1 B1 1A E1 }
 		$zipmagic = "PK"
@@ -31,6 +35,8 @@ rule LLTTCS_DOCM_Dropper_DocumentVariable
         source = "u2150600"
         description = "Detects a malicious base64 encoded encryption key in document variables"
         origin_malware = "Teslacrypt v3.0.1"
+        indicator_strength = 100
+        indicator_generality = 10
         file_type1 = "xml"
         file_type2 = "bin"
         date = "03/Jan/2024"
@@ -51,6 +57,8 @@ rule LLTTCS_DOCM_Dropper_WritingRegistry_Strings
         source = "u2150600"
         description = "Detects malicious registry keys stored in docm droppers"
         origin_malware = "Teslacrypt v3.0.1"
+        indicator_strength = 55
+        indicator_generality = 60
         file_type = "bin"
         date = "03/Jan/2024"
         //docm md5hash : "8b404aca7e0ded3145f8a696e2f94a58"
@@ -66,16 +74,15 @@ rule LLTTCS_DOCM_Dropper_WritingRegistry_Strings
         (all of ($registryKeys*)) and $RegWrite
 }
 
-/*/
-import "cuckoo"
-
 rule LLTTCS_DOCM_Dropper_WritingRegistry_Cuckoo
 {
     meta:
         source = "u2150600"
-        description = "Detects malicious registry keys used in docm droppers"
+        description = "Detects malicious registry keys used in docm droppers from cuckoo output"
         origin_malware = "Teslacrypt v3.0.1"
-        file_type = "bin"
+        indicator_strength = 60
+        indicator_generality = 75
+        file_type = "cuckoo json"
         date = "03/Jan/2024"
         md5hash_docm = "8b404aca7e0ded3145f8a696e2f94a58"
         md5hash_vbaProjectbin = "7cbefc1d052d5ca36e928827dbdca7f9"
@@ -86,13 +93,15 @@ rule LLTTCS_DOCM_Dropper_WritingRegistry_Cuckoo
         cuckoo.registry.key_access(/\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\ProtectedView\\DisableAttachementsInPV/i) and
         cuckoo.registry.key_access(/\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\ProtectedView\\DisableUnsafeLocationsInPV/i)
 }
-/*/
+
 rule LLTTCS_DOCM_Dropper_AutoOpensShell
 {
     meta:
         source = "u2150600"
         description = "Detects usage of shell execution in docm droppers"
         origin_malware = "Teslacrypt v3.0.1"
+        indicator_strength = 50
+        indicator_generality = 80
         file_type = "bin"
         date = "03/Jan/2024"
         //docm md5hash : "8b404aca7e0ded3145f8a696e2f94a58"
@@ -114,6 +123,8 @@ rule LLTTCS_DOCM_Dropper_DecryptedStrings
         source = "u2150600"
         description = "Finds decrypted strings used in the dropper"
         origin_malware = "Teslacrypt v3.0.1"
+        indicator_strength = 90
+        indicator_generality = 5
         // This can be used with a memory dump of the dropper 
         // due to the decrypted strings being stored in memory
         file_type = "Memory dump" 
@@ -129,7 +140,7 @@ rule LLTTCS_DOCM_Dropper_DecryptedStrings
         $FileUrl2_1 = "http:" nocase wide ascii
         $FileUrl2_2 = "//10.0.2.4:8000/12152021_17_59_52.ps1" nocase wide ascii
 
-        //$XMLHTTP1_1 = "M" nocase wide ascii
+        $XMLHTTP1_1 = "M" nocase wide ascii
         $XMLHTTP1_2 = "icrosoft.XMLHTTP" nocase wide ascii
 
         $GET = "GET" nocase wide ascii
@@ -153,7 +164,7 @@ rule LLTTCS_DOCM_Dropper_DecryptedStrings
         $Command_2 = "ndows\\Temp\\12152021_17_59_52.ps1" nocase wide ascii
 
         $Shell_1 = "WScript.Shel" nocase wide ascii
-        //$Shell_2 = "l" nocase wide ascii
+        $Shell_2 = "l" nocase wide ascii
 
         $ErrMsg1_1 = "Error : This " nocase wide ascii
         $ErrMsg1_2 = "document is corrupted" nocase wide ascii
@@ -161,28 +172,92 @@ rule LLTTCS_DOCM_Dropper_DecryptedStrings
         $ErrMsg2_1 = "Error : This document may no" nocase wide ascii
         $ErrMsg2_2 = "t contain all data" nocase wide ascii
     condition:
-        all of ($FileUrl1*, $FileUrl2*, $XMLHTTP1_2, $XMLHTTP2*, $GET, 
+        all of ($FileUrl1*, $FileUrl2*, $XMLHTTP1*, $XMLHTTP2*, $GET, 
                 $ADODB1*, $ADODB2*, $FilePath1*, $FilePath2*, 
-                    $Command*, $Shell_1, $ErrMsg1*, $ErrMsg2*)
+                    $Command*, $Shell*, $ErrMsg1*, $ErrMsg2*)
 }
 
+//Without another similar dropper its difficult to generalise the executable file name
+//The powershell script is generalised to any file with the format MMDDYYYY_HH_MM_SS (adapted from Bravo (2018))
 rule LLTTCS_DOCM_Dropper_NetworkComms
 {
     meta:
         source = "u2150600"
-        description = "Detects usage of shell execution in docm droppers"
+        description = "Detects specific network communications in docm dropper from cuckoo output"
         origin_malware = "Teslacrypt v3.0.1"
-        file_type = "packet capture"
+        indicator_strength = 70
+        indicator_generality = 60
+        file_type = "cuckoo json"
         date = "03/Jan/2024"
-        //docm md5hash : "8b404aca7e0ded3145f8a696e2f94a58"
-        //md5hash_vbaProjectbin = "7cbefc1d052d5ca36e928827dbdca7f9"
-        
-    strings:
-        $AutoOpen = "AutoOpen" fullword ascii
-        $CreateObject = "CreateObject" fullword nocase wide ascii
-        $WscriptShell = "WScript.Shell" fullword nocase wide ascii 
-        $exec = "exec" fullword nocase wide ascii 
+        md5hash_docm = "8b404aca7e0ded3145f8a696e2f94a58"
+        md5hash_vbaProjectbin = "7cbefc1d052d5ca36e928827dbdca7f9"
+        // ms457.exe md5hash : 7991c88d40bbbfddcc8c85b427350af4
+        // 12152021_17_59_52.ps1 md5hash : 817b64d7d836a275d6dedbe7dd380757
 
     condition:
-        $AutoOpen and $CreateObject and $WscriptShell and $exec
+        cuckoo.network.http_get(/http:\/\/10\.0\.2\.4:8000\/ms457\.exe/i) and 
+            cuckoo.network.http_get(/http:\/\/10\.0\.2\.4:8000\/(((0[1-9]|1[012])[0-2]\d)|((0[1,3-9]|1[012])-30)|((0?[1,3,5,7,8]|1[02])-31))\d{4}_(0?[1-9]|1\d|2[0-3])(_([0-5]\d)){2}\.ps1/i)
+}
+
+//Without another similar dropper its difficult to generalise the executable file name
+//The powershell script is generalised to any file with the format MMDDYYYY_HH_MM_SS (adapted from Bravo (2018))
+rule LLTTCS_DOCM_Dropper_FileCreation
+{
+    meta:
+        source = "u2150600"
+        description = "Detects files created in docm dropper from cuckoo output"
+        origin_malware = "Teslacrypt v3.0.1"
+        indicator_strength = 70
+        indicator_generality = 60
+        file_type = "cuckoo json"
+        date = "03/Jan/2024"
+        md5hash_docm = "8b404aca7e0ded3145f8a696e2f94a58"
+        md5hash_vbaProjectbin = "7cbefc1d052d5ca36e928827dbdca7f9"
+        // ms457.exe md5hash : 7991c88d40bbbfddcc8c85b427350af4
+        // 12152021_17_59_52.ps1 md5hash : 817b64d7d836a275d6dedbe7dd380757
+
+    condition:
+        cuckoo.filesystem.file_access(/C:\\Windows\\Temp\\ms457\.exe/i) and 
+            cuckoo.filesystem.file_access(/C:\\Windows\\Temp\\(((0[1-9]|1[012])[0-2]\d)|((0[1,3-9]|1[012])-30)|((0?[1,3,5,7,8]|1[02])-31))\d{4}_(0?[1-9]|1\d|2[0-3])(_([0-5]\d)){2}\.ps1/i)
+}
+
+rule LLTTCS_ps1_Dropper_Static
+{
+    meta:
+        source = "u2150600"
+        description = "Detects malicious strings in powershell script"
+        origin_malware = "Teslacrypt v3.0.1"
+        indicator_strength = 60
+        indicator_generality = 60
+        file_type = "ps1"
+        date = "03/Jan/2024"
+        md5hash_ps1 = "817b64d7d836a275d6dedbe7dd380757"
+        
+    strings:
+        $MSUpdate = "MSUpdate.exe" nocase wide ascii
+        $ms457Path = "C:\\Windows\\Temp\\ms457.exe" nocase wide ascii
+        $readBytes = "[System.IO.File]::ReadAllBytes" nocase wide ascii
+        $e_lfanew = "0x3C" nocase wide ascii
+        $writeBytes = "[System.IO.File]::WriteAllBytes(" nocase wide ascii
+        $appdata = "$env:APPDATA" nocase wide ascii
+        $deleteFile = "Remove-Item -Path" nocase wide ascii
+        $startProcess = "Start-Process" nocase wide ascii
+    condition:
+        all of them   
+}
+
+rule LLTTCS_ps1_Dropper_Static
+{
+    meta:
+        source = "u2150600"
+        description = "Detects malicious operations in powershell script from cuckoo output"
+        origin_malware = "Teslacrypt v3.0.1"
+        indicator_strength = 60
+        indicator_generality = 65
+        file_type = "ps1"
+        date = "03/Jan/2024"
+        md5hash_ps1 = "817b64d7d836a275d6dedbe7dd380757"
+        
+    condition:
+        cuckoofilesystem.file_access(/\\AppData\\Roaming\\MSUpdate\.exe/) 
 }
