@@ -246,7 +246,7 @@ rule LLTTCS_ps1_Dropper_Static
         all of them   
 }
 
-rule LLTTCS_ps1_Dropper_Static
+rule LLTTCS_ps1_Dropper_Dynamic
 {
     meta:
         source = "u2150600"
@@ -259,5 +259,5 @@ rule LLTTCS_ps1_Dropper_Static
         md5hash_ps1 = "817b64d7d836a275d6dedbe7dd380757"
         
     condition:
-        cuckoofilesystem.file_access(/\\AppData\\Roaming\\MSUpdate\.exe/) 
+        cuckoo.filesystem.file_access(/\\AppData\\Roaming\\MSUpdate\.exe/) 
 }
