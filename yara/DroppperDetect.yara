@@ -1,4 +1,4 @@
-//import "cuckoo"
+import "cuckoo"
 
 //(evild3ad, 2016)
 rule Contains_VBA_macro_code
@@ -74,7 +74,7 @@ rule LLTTCS_DOCM_Dropper_WritingRegistry_Strings
         (all of ($registryKeys*)) and $RegWrite
 }
 
-/* rule LLTTCS_DOCM_Dropper_WritingRegistry_Cuckoo
+rule LLTTCS_DOCM_Dropper_WritingRegistry_Cuckoo
 {
     meta:
         source = "u2150600"
@@ -92,7 +92,7 @@ rule LLTTCS_DOCM_Dropper_WritingRegistry_Strings
         cuckoo.registry.key_access(/\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\ProtectedView\\DisableInternetFilesInPV/i) and
         cuckoo.registry.key_access(/\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\ProtectedView\\DisableAttachementsInPV/i) and
         cuckoo.registry.key_access(/\\Software\\Microsoft\\Office\\[0-9]+.[0-9]+\\(Word|Excel)\\Security\\ProtectedView\\DisableUnsafeLocationsInPV/i)
-} */
+}
 
 rule LLTTCS_DOCM_Dropper_AutoOpensShell
 {
@@ -177,7 +177,7 @@ rule LLTTCS_DOCM_Dropper_DecryptedStrings
                     $Command*, $Shell*, $ErrMsg1*, $ErrMsg2*)
 }
 
-/* //Without another similar dropper its difficult to generalise the executable file name
+//Without another similar dropper its difficult to generalise the executable file name
 //The powershell script is generalised to any file with the format MMDDYYYY_HH_MM_SS (adapted from Bravo (2018))
 rule LLTTCS_DOCM_Dropper_NetworkComms
 {
@@ -197,9 +197,9 @@ rule LLTTCS_DOCM_Dropper_NetworkComms
     condition:
         cuckoo.network.http_get(/http:\/\/10\.0\.2\.4:8000\/ms457\.exe/i) and 
             cuckoo.network.http_get(/http:\/\/10\.0\.2\.4:8000\/(((0[1-9]|1[012])[0-2]\d)|((0[1,3-9]|1[012])-30)|((0?[1,3,5,7,8]|1[02])-31))\d{4}_(0?[1-9]|1\d|2[0-3])(_([0-5]\d)){2}\.ps1/i)
-} */
+}
 
-/* //Without another similar dropper its difficult to generalise the executable file name
+//Without another similar dropper its difficult to generalise the executable file name
 //The powershell script is generalised to any file with the format MMDDYYYY_HH_MM_SS (adapted from Bravo (2018))
 rule LLTTCS_DOCM_Dropper_FileCreation
 {
@@ -219,7 +219,7 @@ rule LLTTCS_DOCM_Dropper_FileCreation
     condition:
         cuckoo.filesystem.file_access(/C:\\Windows\\Temp\\ms457\.exe/i) and 
             cuckoo.filesystem.file_access(/C:\\Windows\\Temp\\(((0[1-9]|1[012])[0-2]\d)|((0[1,3-9]|1[012])-30)|((0?[1,3,5,7,8]|1[02])-31))\d{4}_(0?[1-9]|1\d|2[0-3])(_([0-5]\d)){2}\.ps1/i)
-} */
+}
 
 rule LLTTCS_ps1_Dropper_Static
 {
@@ -246,7 +246,7 @@ rule LLTTCS_ps1_Dropper_Static
         all of them   
 }
 
-/* rule LLTTCS_ps1_Dropper_Dynamic
+rule LLTTCS_ps1_Dropper_Dynamic
 {
     meta:
         source = "u2150600"
@@ -260,4 +260,4 @@ rule LLTTCS_ps1_Dropper_Static
         
     condition:
         cuckoo.filesystem.file_access(/\\AppData\\Roaming\\MSUpdate\.exe/) 
-} */
+}
