@@ -1,4 +1,3 @@
-import "cuckoo"
 
 //(evild3ad, 2016)
 rule Contains_VBA_macro_code
@@ -66,6 +65,8 @@ rule LLTTCS_DOCM_Dropper_WritingRegistry_Strings
     condition:
         (all of ($registryKeys*)) and $RegWrite
 }
+
+import "cuckoo"
 
 rule LLTTCS_DOCM_Dropper_WritingRegistry_Cuckoo
 {
