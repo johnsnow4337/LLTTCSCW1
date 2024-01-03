@@ -127,7 +127,7 @@ rule LLTTCS_DOCM_Dropper_DecryptedStrings
         $FileUrl2_1 = "http:" nocase wide ascii
         $FileUrl2_2 = "//10.0.2.4:8000/12152021_17_59_52.ps1" nocase wide ascii
 
-        $XMLHTTP1_1 = "M" nocase wide ascii
+        //$XMLHTTP1_1 = "M" nocase wide ascii
         $XMLHTTP1_2 = "icrosoft.XMLHTTP" nocase wide ascii
 
         $GET = "GET" nocase wide ascii
@@ -151,7 +151,7 @@ rule LLTTCS_DOCM_Dropper_DecryptedStrings
         $Command_2 = "ndows\\Temp\\12152021_17_59_52.ps1" nocase wide ascii
 
         $Shell_1 = "WScript.Shel" nocase wide ascii
-        $Shell_2 = "l" nocase wide ascii
+        //$Shell_2 = "l" nocase wide ascii
 
         $ErrMsg1_1 = "Error : This " nocase wide ascii
         $ErrMsg1_2 = "document is corrupted" nocase wide ascii
