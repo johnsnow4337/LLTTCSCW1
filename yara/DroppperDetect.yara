@@ -1,4 +1,4 @@
-rule LLTTCS_DOCM_Dropper:DocumentVariable
+rule LLTTCS_DOCM_Dropper_DocumentVariable
 {
     meta:
         source = "u2150600"
@@ -16,7 +16,7 @@ rule LLTTCS_DOCM_Dropper:DocumentVariable
     condition:
         $docVarName or $docVarVal
 }
-rule LLTTCS_DOCM_Dropper:MacroStrings
+rule LLTTCS_DOCM_Dropper_MacroStrings
 {
     meta:
         source = "u2150600"
