@@ -34,5 +34,5 @@ rule LLTTCS_DOCM_Dropper_MacroStrings
 
 
     condition:
-        (any of ($registryKeys*))
+        $registryKeys_VBAWarnings
 }
