@@ -159,7 +159,9 @@ rule LLTTCS_DOCM_Dropper_DecryptedStrings
         $ErrMsg2_1 = "Error : This document may no" nocase wide ascii
         $ErrMsg2_2 = "t contain all data" nocase wide ascii
     condition:
-        ($FileUrl1*) and ($FileUrl2*) and ($XMLHTTP1*) and ($XMLHTTP2*) and $GET and ($ADODB1*) and ($ADODB2*) and ($FilePath1*) and ($FilePath2*) and ($Command*) and ($Shell*) and ($ErrMsg1*) and ($ErrMsg2*)
+        all of (($FileUrl1*), ($FileUrl2*), ($XMLHTTP1*), ($XMLHTTP2*), $GET, 
+                ($ADODB1*), ($ADODB2*), ($FilePath1*), ($FilePath2*), 
+                    ($Command*), ($Shell*), ($ErrMsg1*), ($ErrMsg2*))
 }
 
 rule LLTTCS_DOCM_Dropper_NetworkComms
