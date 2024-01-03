@@ -12,5 +12,5 @@ rule LLTTCS_DOCM_Dropper
         $docVarName = "kBQHAjmEelVSHUyT" wide
 
     condition:
-        $docVarName
+        contains $docVarName
 }
