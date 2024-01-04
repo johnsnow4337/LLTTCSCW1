@@ -1,7 +1,7 @@
-f = open("decryptedExtensions.txt", "r")
+f = open("entensionOutput\\decryptedExtensions.txt", "r")
 myReadlines = f.readlines()
 f.close()
-f2 = open("CheckPointExtensions.txt","r")
+f2 = open("entensionOutput\\CheckPointExtensions.txt","r")
 theirReadlines = f2.readlines()
 f2.close()
 for i in range(len(theirReadlines)):

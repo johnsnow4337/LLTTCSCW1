@@ -4,8 +4,8 @@ import json
 import time
 key = b'kasdfgh283'
 
-findEncrypted = True
-decrypt = False
+findEncrypted = False
+decrypt = True
 if findEncrypted:
     from Crypto.Cipher import ARC2
     exe = open("myFile3.exe", "rb")
@@ -69,10 +69,10 @@ if findEncrypted:
         print(b"Cipher b64: "+ciphertext[4:-4-skip])
         ciphertext = base64.b64decode(ciphertext[4:-4-skip]+ b'==')
         print(b"b64 decode: " + ciphertext)
-        f = open("encryptedStrs.txt","a")
+        f = open("decryptionResources\\encryptedStrs.txt","a")
         f.write(ciphertext.hex()+":::"+iv.decode("ascii")+":::\n")
         f.close()
-    f = open("encryptedStrs.txt","w")
+    f = open("decryptionResources\\encryptedStrs.txt","w")
     f.close()
     
     for i in range(0x2f8//0x4):
@@ -93,10 +93,10 @@ if findEncrypted:
 
         
 if decrypt:
-    f = open("encryptedStrsNoExt.txt","r")
+    f = open("decryptionResources\\encryptedStrsNoExt.txt","r")
     readEncrypted = f.read()
     f.close()
-    f = open("decryptedStrs.txt","w")
+    f = open("decryptionResources\\decryptedStrs.txt","w")
     f.close()
     count = 1
     for ciphertext in readEncrypted.split(":::\n"):
@@ -131,7 +131,7 @@ if decrypt:
                     decrypted = json.loads(response.text)['data']
                     decryptedStr = bytes.fromhex(decrypted).decode("ascii")
                     print("decrypted: "+decryptedStr)
-                    f = open("decryptedStrs.txt","a")
+                    f = open("decryptionResources\\decryptedStrs.txt","a")
                     f.write(str(count)+":  "+decryptedStr[:-1]+"\n")
                     count+=1
                     f.close()

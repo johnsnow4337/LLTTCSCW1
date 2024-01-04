@@ -10,6 +10,7 @@ genHashes = True
 saveHashes = False
 useSaved = False
 useDefaultNames = True
+directory = "dllResources\\"
 if useDefaultNames:
     dlls = ["kernel32", "advapi32", "shell32", "netapi32", "wininet"]
     exportFiles = []
@@ -28,12 +29,13 @@ if genHashes:
         hashDict.append({})
         hashDictReverse.append({})
         started = False
-
-        f = open(dllExports[i], "r")
+        f = open(directory+dllExports[i], "r")
         lines = f.readlines()
         f.close()
         if saveHashes:
-            f2 = open(exportFiles[i], "w")
+            import os
+            os.makedirs(directory, exist_ok=True)
+            f2 = open(directory+exportFiles[i], "w")
         for line in lines:
             lineSplit = line.split()
             if len(lineSplit)>0:
@@ -60,7 +62,7 @@ if genHashes:
             f2.close()
 elif useSaved:
     for dictionary in exportFiles:
-        f = open(dictionary, "r")
+        f = open(directory+dictionary, "r")
         lines = f.readlines()
         f.close()
         hashDict.append({})
@@ -105,6 +107,7 @@ interactive = True
 if interactive:
     while True:
         print("Enter the export or hash to find: ")
+        dictionary = hashDict
         keyInput = input()
         try:
             keyInput = int(keyInput)
@@ -112,8 +115,8 @@ if interactive:
             try:
                 keyInput = int(keyInput,16)
             except:
-                pass
-        result = findHash(hashDict, keyInput)
+                dictionary = hashDictReverse
+        result = findHash(dictionary, keyInput)
         if useDefaultNames and result[1]!=-1:
             print("\nFound function(s) in DLL: "+dlls[result[1]])
             

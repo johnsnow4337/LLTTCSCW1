@@ -39,8 +39,8 @@ def from_request(request):
         dataPart = dataPart.split(delimiter)[0]
     return dataPart
 readPCAP = True
-pcapName = "UserPC_NetworkTraffic220107.pcap"
-#pcapName = "test.pcapng"
+pcapName = "packetSamples\\UserPC_NetworkTraffic220107.pcap"
+#pcapName = "packetSamples\\test.pcapng"
 usebytes = True
 if readPCAP:
     f = open(pcapName,"rb" if usebytes else "r")
