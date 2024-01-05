@@ -11,9 +11,9 @@ rule Contains_VBA_macro_code
         //Added md5 hash of 'Anual Report.docm'
         md5hash_docm = "8b404aca7e0ded3145f8a696e2f94a58"
         md5hash_vbaProjectbin = "7cbefc1d052d5ca36e928827dbdca7f9"
-        //Added indicator strength
-        indicator_strength = 10
-        indicator_generality = 90
+        //Added rule metrics
+        rule_strength = 10
+        rule_generality = 90
 	strings:
 		$officemagic = { D0 CF 11 E0 A1 B1 1A E1 }
 		$zipmagic = "PK"
@@ -35,8 +35,8 @@ rule LLTTCS_DOCM_Dropper_DocumentVariable
         source = "u2150600"
         description = "Detects a malicious base64 encoded encryption key in document variables"
         origin_malware = "Teslacrypt v3.0.1"
-        indicator_strength = 100
-        indicator_generality = 10
+        rule_strength = 100
+        rule_generality = 10
         file_type1 = "xml"
         file_type2 = "bin"
         date = "03/Jan/2024"
@@ -57,8 +57,8 @@ rule LLTTCS_DOCM_Dropper_WritingRegistry_Strings
         source = "u2150600"
         description = "Detects malicious registry keys stored in docm droppers"
         origin_malware = "Teslacrypt v3.0.1"
-        indicator_strength = 55
-        indicator_generality = 60
+        rule_strength = 55
+        rule_generality = 60
         file_type = "bin"
         date = "03/Jan/2024"
         //docm md5hash : "8b404aca7e0ded3145f8a696e2f94a58"
@@ -80,8 +80,8 @@ rule LLTTCS_DOCM_Dropper_WritingRegistry_Cuckoo
         source = "u2150600"
         description = "Detects malicious registry keys used in docm droppers from cuckoo output"
         origin_malware = "Teslacrypt v3.0.1"
-        indicator_strength = 60
-        indicator_generality = 75
+        rule_strength = 60
+        rule_generality = 75
         file_type = "cuckoo json"
         date = "03/Jan/2024"
         md5hash_docm = "8b404aca7e0ded3145f8a696e2f94a58"
@@ -100,8 +100,8 @@ rule LLTTCS_DOCM_Dropper_AutoOpensShell
         source = "u2150600"
         description = "Detects usage of shell execution in docm droppers"
         origin_malware = "Teslacrypt v3.0.1"
-        indicator_strength = 50
-        indicator_generality = 80
+        rule_strength = 50
+        rule_generality = 80
         file_type = "bin"
         date = "03/Jan/2024"
         //docm md5hash : "8b404aca7e0ded3145f8a696e2f94a58"
@@ -123,8 +123,8 @@ rule LLTTCS_DOCM_Dropper_DecryptedStrings
         source = "u2150600"
         description = "Finds decrypted strings used in the dropper"
         origin_malware = "Teslacrypt v3.0.1"
-        indicator_strength = 90
-        indicator_generality = 5
+        rule_strength = 90
+        rule_generality = 5
         // This can be used with a memory dump of the dropper 
         // due to the decrypted strings being stored in memory
         file_type = "Memory dump" 
@@ -185,8 +185,8 @@ rule LLTTCS_DOCM_Dropper_NetworkComms
         source = "u2150600"
         description = "Detects specific network communications in docm dropper from cuckoo output"
         origin_malware = "Teslacrypt v3.0.1"
-        indicator_strength = 70
-        indicator_generality = 60
+        rule_strength = 70
+        rule_generality = 60
         file_type = "cuckoo json"
         date = "03/Jan/2024"
         md5hash_docm = "8b404aca7e0ded3145f8a696e2f94a58"
@@ -207,8 +207,8 @@ rule LLTTCS_DOCM_Dropper_FileCreation
         source = "u2150600"
         description = "Detects files created in docm dropper from cuckoo output"
         origin_malware = "Teslacrypt v3.0.1"
-        indicator_strength = 70
-        indicator_generality = 60
+        rule_strength = 70
+        rule_generality = 60
         file_type = "cuckoo json"
         date = "03/Jan/2024"
         md5hash_docm = "8b404aca7e0ded3145f8a696e2f94a58"
@@ -227,8 +227,8 @@ rule LLTTCS_ps1_Dropper_Static
         source = "u2150600"
         description = "Detects malicious strings in powershell script"
         origin_malware = "Teslacrypt v3.0.1"
-        indicator_strength = 60
-        indicator_generality = 60
+        rule_strength = 60
+        rule_generality = 60
         file_type = "ps1"
         date = "03/Jan/2024"
         md5hash_ps1 = "817b64d7d836a275d6dedbe7dd380757"
@@ -252,9 +252,9 @@ rule LLTTCS_ps1_Dropper_Dynamic
         source = "u2150600"
         description = "Detects malicious operations in powershell script from cuckoo output"
         origin_malware = "Teslacrypt v3.0.1"
-        indicator_strength = 60
-        indicator_generality = 65
-        file_type = "ps1"
+        rule_strength = 60
+        rule_generality = 65
+        file_type = "cuckoo json"
         date = "03/Jan/2024"
         md5hash_ps1 = "817b64d7d836a275d6dedbe7dd380757"
         
