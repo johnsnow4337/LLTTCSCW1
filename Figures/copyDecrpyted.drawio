@@ -1,0 +1,114 @@
+<mxfile host="app.diagrams.net" modified="2023-12-08T15:37:33.696Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36" etag="WMoe-7oC6yrZ51yaci04" version="22.1.7" type="onedrive">
+  <diagram name="Page-1" id="r7QO4Svnjzv9mqoSbV15">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;startArrow=block;startFill=0;" edge="1" parent="1" target="G3q_HlLeswZoW_-VU9tr-42">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="580" y="575.5714285714287" as="targetPoint" />
+            <mxPoint x="363.21000000000004" y="575" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-42" target="G3q_HlLeswZoW_-VU9tr-45">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-42" value="&lt;div style=&quot;color: rgb(56, 58, 66); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(64, 120, 242);&quot;&gt;unpackFunc_d&lt;/span&gt;(&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;*&lt;/span&gt;returnArr)&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="510" y="562.22" width="220" height="25.57" as="geometry" />
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-59" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;startArrow=block;startFill=0;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-45">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="940" y="655" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-60" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-45" target="G3q_HlLeswZoW_-VU9tr-61">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-45" value="&lt;span style=&quot;color: rgb(56, 58, 66); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px;&quot;&gt;newRWMemPlus0x940f &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; color: rgb(166, 38, 164);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(56, 58, 66); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px;&quot;&gt; [returnArr&lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; color: rgb(152, 104, 1);&quot;&gt;0x34&lt;/span&gt;&lt;span style=&quot;color: rgb(56, 58, 66); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px;&quot;&gt;]&lt;/span&gt;&lt;br&gt;&lt;div style=&quot;color: rgb(56, 58, 66); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-weight: normal; font-size: 14px; line-height: 19px;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: #383a42;&quot;&gt;_0x3f400 &lt;/span&gt;&lt;span style=&quot;color: #a626a4;&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: #383a42;&quot;&gt; [returnArr&lt;/span&gt;&lt;span style=&quot;color: #a626a4;&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;color: #986801;&quot;&gt;0x38&lt;/span&gt;&lt;span style=&quot;color: #383a42;&quot;&gt;]&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(64, 120, 242);&quot;&gt;decryptFunc_d&lt;/span&gt;&lt;span style=&quot;color: rgb(56, 58, 66);&quot;&gt;(newRWMemPlus0x940f, _0x3f400)&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="620" width="360" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-64" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;startArrow=block;startFill=0;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-61" target="G3q_HlLeswZoW_-VU9tr-65">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620" y="870" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-61" value="&lt;div style=&quot;color: rgb(56, 58, 66); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;div style=&quot;&quot;&gt;peAddr = &lt;span style=&quot;color: rgb(64, 120, 242);&quot;&gt;getPEHeader_d&lt;/span&gt;(newRWMemPlus0x940f)&lt;/div&gt;&lt;div style=&quot;&quot;&gt;VirtualAlloc &lt;span style=&quot;color: #a626a4;&quot;&gt;=&lt;/span&gt; [returnArr&lt;span style=&quot;color: #a626a4;&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;color: #986801;&quot;&gt;0x1c&lt;/span&gt;]&lt;/div&gt;&lt;div style=&quot;&quot;&gt;sizeOfImage &lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;=&lt;/span&gt; [peAddr&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0x50&lt;/span&gt;]&lt;/div&gt;&lt;div style=&quot;&quot;&gt;newestRWMem &lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;=&lt;/span&gt; &lt;span style=&quot;color: rgb(64, 120, 242);&quot;&gt;VirtualAlloc&lt;/span&gt;(&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0&lt;/span&gt;,sizeOfImage,&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0x1000&lt;/span&gt;,&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0x4&lt;/span&gt;)&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(64, 120, 242);&quot;&gt;copyDecrypted_d&lt;/span&gt;(newRWMemPlus0x940f,newestRWMem)&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="710" width="420" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-62" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=block;startFill=0;exitX=1;exitY=0.169;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-61">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="970" y="730" as="targetPoint" />
+            <mxPoint x="830" y="740" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="970" y="730" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-63" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=none;startFill=0;exitX=1;exitY=0.875;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=none;endFill=0;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-61">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="990" y="815" as="targetPoint" />
+            <mxPoint x="840" y="830" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="980" y="815" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-66" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-65" target="G3q_HlLeswZoW_-VU9tr-68">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620" y="1039" as="targetPoint" />
+            <mxPoint x="620" y="999" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-65" value="&lt;div style=&quot;color: rgb(56, 58, 66); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp;peAddr = &lt;span style=&quot;color: rgb(64, 120, 242);&quot;&gt;getPEHeader_d&lt;/span&gt;(decryptedMem)&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp;noOfSections &lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;=&lt;/span&gt; [peAddr&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0x6&lt;/span&gt;]&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: #a626a4;&quot;&gt;&amp;nbsp;if&lt;/span&gt; noOfSections&lt;span style=&quot;color: #a626a4;&quot;&gt;!=&lt;/span&gt;&lt;span style=&quot;color: #986801;&quot;&gt;0&lt;/span&gt;:&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp;currSectionAddr &lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;=&lt;/span&gt; peAddr&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0x18&lt;/span&gt;&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;[peAddr&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0x14&lt;/span&gt;]&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp;count&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="437.5" y="870" width="365" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-68" target="G3q_HlLeswZoW_-VU9tr-73">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620.2352941176471" y="1210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-68" value="&lt;div style=&quot;color: rgb(56, 58, 66); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;div style=&quot;&quot;&gt;newMemSectionAddr &lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;=&lt;/span&gt; newMem&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;[currSectionAddr&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0xc&lt;/span&gt;]&lt;/div&gt;&lt;div style=&quot;&quot;&gt;sizeOfData &lt;span style=&quot;color: #a626a4;&quot;&gt;=&lt;/span&gt; [currSectionAddr&lt;span style=&quot;color: #a626a4;&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;color: #986801;&quot;&gt;0x10&lt;/span&gt;]&lt;/div&gt;&lt;div style=&quot;&quot;&gt;rawData &lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;=&lt;/span&gt; decryptedMem&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;[currSectionAddr&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0x14&lt;/span&gt;]&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: #4078f2;&quot;&gt;newMemCpy_d&lt;/span&gt;(newMemSectionAddr, rawData, sizeOfData)&lt;/div&gt;&lt;div style=&quot;&quot;&gt;currSectionAddr&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+=&lt;/span&gt;&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0x28&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;count&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+=&lt;/span&gt;&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;1&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="416.25" y="1029" width="407.5" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=block;startFill=0;exitX=1.002;exitY=0.615;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-68">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="970" y="1103" as="targetPoint" />
+            <mxPoint x="823.75" y="1099" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="964" y="1103" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-70" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-68" target="G3q_HlLeswZoW_-VU9tr-68">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="620" y="1169" />
+              <mxPoint x="370" y="1169" />
+              <mxPoint x="370" y="1009" />
+              <mxPoint x="620" y="1009" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-71" value="&lt;div style=&quot;color: rgb(56, 58, 66); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;div style=&quot;&quot;&gt;count&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;&amp;lt;&lt;/span&gt;NumberOfSections&lt;/div&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="G3q_HlLeswZoW_-VU9tr-70">
+          <mxGeometry x="0.6371" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-73" value="&lt;div style=&quot;color: rgb(56, 58, 66); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px;&quot;&gt;&lt;div style=&quot;&quot;&gt;sizeOfHeaders &lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;=&lt;/span&gt; [peAddr&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;+&lt;/span&gt;&lt;span style=&quot;color: rgb(152, 104, 1);&quot;&gt;0x54&lt;/span&gt;]&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(64, 120, 242);&quot;&gt;newRWMemcpy_d&lt;/span&gt;(newMem, decryptedMem, sizeOfHeaders)&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;div style=&quot;line-height: 19px;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(166, 38, 164);&quot;&gt;return&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="1190" width="420" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="G3q_HlLeswZoW_-VU9tr-74" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=block;startFill=0;" edge="1" parent="1" source="G3q_HlLeswZoW_-VU9tr-73">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="970" y="1220" as="targetPoint" />
+            <mxPoint x="830" y="1219.23" as="sourcePoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

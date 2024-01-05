@@ -1,0 +1,127 @@
+<mxfile host="app.diagrams.net" modified="2023-12-29T00:46:44.375Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0" etag="AUJMXLR3U7KnFIQpK_l9" version="22.1.14" type="onedrive">
+  <diagram name="Page-1" id="mA9KnFMOpT-UQdTU4MqX">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="yoWECQIdevA45j4zDhMU-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-3" target="yoWECQIdevA45j4zDhMU-21">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1060" y="2820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-2" value="&lt;font face=&quot;Consolas&quot;&gt;for drive in&amp;nbsp;GetLogicalDriveStringsW()&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="yoWECQIdevA45j4zDhMU-1">
+          <mxGeometry x="0.0343" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-3" value="&lt;span style=&quot;color: rgb(166, 38, 174); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;EncryptDrives&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="2700" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-6" target="yoWECQIdevA45j4zDhMU-14">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1060" y="2950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-5" value="for file in directory" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="yoWECQIdevA45j4zDhMU-4">
+          <mxGeometry x="-0.0185" y="-2" relative="1" as="geometry">
+            <mxPoint x="3" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-6" value="EncryptDirectory(directory)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="950" y="2880" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-9" target="yoWECQIdevA45j4zDhMU-10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1220" y="3110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-9" target="yoWECQIdevA45j4zDhMU-14">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1060" y="3205" />
+              <mxPoint x="1060" y="3230" />
+              <mxPoint x="1380" y="3230" />
+              <mxPoint x="1380" y="2940" />
+              <mxPoint x="1060" y="2940" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-9" value="EncryptFile(file)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="945" y="3175" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-10" value="EncryptFile" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1241" y="3160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-14" target="yoWECQIdevA45j4zDhMU-16">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="997.7399999999998" y="3170" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="910" y="2993" />
+              <mxPoint x="910" y="3320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-12" value="else" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="yoWECQIdevA45j4zDhMU-11">
+          <mxGeometry x="-0.2006" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-14" target="yoWECQIdevA45j4zDhMU-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-14" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;if file.type != DIRECTORY&lt;/span&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="977.5" y="2953" width="165" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-16" target="yoWECQIdevA45j4zDhMU-19">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1081.99" y="3430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-16" value="&lt;div style=&quot;&quot;&gt;if file.name != &quot;.&quot; or &quot;..&quot; or CSIDL_WINDOWS or CSIDL_PROGRAM_FILES or CSIDL_COMMON_APPDATA&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="965.74" y="3240" width="232.5" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-19" target="yoWECQIdevA45j4zDhMU-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="3460" />
+              <mxPoint x="850" y="2895" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-19" target="yoWECQIdevA45j4zDhMU-23">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1081.99" y="3510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-19" value="EncryptDirectory(file.name)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="991.99" y="3430" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-21" target="yoWECQIdevA45j4zDhMU-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-21" value="EncryptDirectory(drive)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="995" y="2790" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-23" target="yoWECQIdevA45j4zDhMU-14">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1082" y="3590" />
+              <mxPoint x="1380" y="3590" />
+              <mxPoint x="1380" y="2940" />
+              <mxPoint x="1060" y="2940" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-23" value="CreateRansomNotes()" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1016.99" y="3510" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="yoWECQIdevA45j4zDhMU-25" target="yoWECQIdevA45j4zDhMU-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="yoWECQIdevA45j4zDhMU-25" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;if &quot;recove&quot; and&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&quot;.mp3&quot;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;not in file.name&lt;/span&gt;&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="978.4399999999999" y="3060" width="163.12" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
